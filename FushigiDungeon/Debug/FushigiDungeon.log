@@ -1,0 +1,3 @@
+﻿  dungeon.cpp
+E:\C++\FushigiDungeon\FushigiDungeon\dungeon.cpp(20,6): warning C4101: 'i': ローカル変数は 1 度も使われていません。
+  FushigiDungeon.vcxproj -> E:\C++\FushigiDungeon\Debug\FushigiDungeon.exe
