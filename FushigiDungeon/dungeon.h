@@ -4,14 +4,17 @@
 
 class Dungeon
 {
-	public:
-		Dungeon(SDL_Renderer* render);
-		void CreateMap(SDL_Renderer* render);
-	private:
+public:
+	Dungeon(SDL_Renderer* render);
+	void CreateMap(SDL_Renderer* render);
+
+	void SetTexture(SDL_Texture* tex) { mTexture = tex; }
+
+private:
 		
-		int mMap[300];
-		int mWidth;
-		int mHeight;
-		SDL_Texture* mTexture;
-		SDL_Surface* Loading_Surf;
+	int mMap[300];
+	int mWidth;
+	int mHeight;
+	SDL_Texture* mTexture;
+	SDL_Surface* Loading_Surf;
 };

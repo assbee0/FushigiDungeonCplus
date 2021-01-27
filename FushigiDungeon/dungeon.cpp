@@ -1,4 +1,4 @@
-#include "dungeon.h"
+#include "Dungeon.h"
 
 Dungeon::Dungeon(SDL_Renderer* render):
 	mMap(),
@@ -6,17 +6,11 @@ Dungeon::Dungeon(SDL_Renderer* render):
 	mHeight(15),
 	mTexture(nullptr)
 {
-	Loading_Surf = IMG_Load("Sprites/ground.png");
-	if (!Loading_Surf)
-	{
-		SDL_Log("Failed to load texture file ");
-		return;
-	}
-	mTexture = SDL_CreateTextureFromSurface(render, Loading_Surf);
+	mMap[300] = { 0 };
 }
 void Dungeon::CreateMap(SDL_Renderer* render)
 {
-	mMap[300] = { 0 };
+	
 	int i, j = 0;
 	
 	for (int i = 0; i < 15; i++)
