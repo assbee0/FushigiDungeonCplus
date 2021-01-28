@@ -5,7 +5,7 @@
 class SpriteComponent : public Component
 {
 public:
-	SpriteComponent(class GameObject* gameObject);
+	SpriteComponent(class GameObject* gameObject, int drawOrder);
 	~SpriteComponent();
 
 	virtual void Draw(SDL_Renderer* renderer);
@@ -16,10 +16,12 @@ public:
 	int GetDrawOrder() const { return mDrawOrder; }
 	void SetDrawOrder(int order) { mDrawOrder = order; }
 
+protected:
+	int mDrawOrder;
+
 private:
 	SDL_Texture* mTexture;
 	int mTexWidth;
 	int mTexHeight;
-	int mDrawOrder;
 
 };

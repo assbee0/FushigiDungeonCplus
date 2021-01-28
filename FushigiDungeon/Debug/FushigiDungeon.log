@@ -1,9 +1,2 @@
-﻿  Game.cpp
-  Player.cpp
-E:\C++\FushigiDungeon\FushigiDungeon\Player.cpp(24,33): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-E:\C++\FushigiDungeon\FushigiDungeon\Player.cpp(30,32): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-E:\C++\FushigiDungeon\FushigiDungeon\Player.cpp(36,33): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-E:\C++\FushigiDungeon\FushigiDungeon\Player.cpp(42,32): warning C4244: '=': 'int' から 'float' への変換です。データが失われる可能性があります。
-E:\C++\FushigiDungeon\FushigiDungeon\Player.cpp(55,49): warning C4244: '+=': 'float' から 'int' への変換です。データが失われる可能性があります。
-  コードを生成中...
+﻿  MoveComponent.cpp
   FushigiDungeon.vcxproj -> E:\C++\FushigiDungeon\Debug\FushigiDungeon.exe

@@ -1,13 +1,14 @@
 #include "Game.h"
+#include "SDL_image.h"
 #include "SpriteComponent.h"
 #include "Player.h"
+#include "Dungeon.h"
 
 Game::Game():
 	mWindow(nullptr),
 	mRenderer(nullptr),
 	mIsRunning(true),
 	mIsUpdatingObjects(false),
-	mDungeon(nullptr),
 	mPlayer(nullptr)
 {
 
@@ -42,7 +43,6 @@ bool Game::Initialize()
 
 	Time::deltaTime = 0;
 	Time::ticksCount = 0;
-	mDungeon = Dungeon(mRenderer);
 
 	LoadData();
 
@@ -162,7 +162,7 @@ void Game::Update()
 	mIsUpdatingObjects = true;
 	for (auto gameObject : mGameObjects)
 	{
-		gameObject->Update();
+		gameObject->UpdateGameObject();
 	}
 	mIsUpdatingObjects = false;
 
@@ -200,7 +200,6 @@ void Game::Draw()
 	// Çå³ýµ±Ç°buffer
 	SDL_RenderClear(mRenderer);
 
-	mDungeon.CreateMap(mRenderer);
 	for (auto sprite : mSprites)
 	{
 		sprite->Draw(mRenderer);
@@ -225,11 +224,15 @@ void Game::Tick(int FPS)
 void Game::LoadData()
 {
 	LoadTexture("Sprites/Ground.png","Ground");
+	LoadTexture("Sprites/Wall.png","Wall");
 	LoadTexture("Sprites/chrA07.png","Player");
-	mDungeon.SetTexture(GetTexture("Ground"));
+
+	mDungeon = new Dungeon(this);
 
 	mPlayer = new Player(this);
-	mPlayer->SetPosition(Vector2(336, 240));
+	mPlayer->SetPosition(Vector2(320, 256));
+	mPlayer->SetMap(mDungeon->GetMap());
+
 }
 
 void Game::UnloadData()

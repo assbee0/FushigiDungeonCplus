@@ -1,26 +1,16 @@
 #include "Dungeon.h"
+#include "Game.h"
+#include "MapComponent.h"
 
-Dungeon::Dungeon(SDL_Renderer* render):
-	mMap(),
-	mWidth(20),
-	mHeight(15),
-	mTexture(nullptr)
+Dungeon::Dungeon(Game* game):
+	GameObject(game)
 {
-	mMap[300] = { 0 };
+	mMap = new MapComponent(this, 20, 15);
+	mMap->SetTexture(game->GetTexture("Ground"));
+	mMap->SetTexture(game->GetTexture("Wall"));
 }
-void Dungeon::CreateMap(SDL_Renderer* render)
+
+int* Dungeon::GetMap()
 {
-	
-	int i, j = 0;
-	
-	for (int i = 0; i < 15; i++)
-		for (int j = 0; j < 20; j++)
-		{
-			SDL_Rect destR;
-			destR.x = j * 32;
-			destR.y = i * 32;
-			destR.w = 32;
-			destR.h = 32;
-			SDL_RenderCopy(render, mTexture, NULL, &destR);
-		}
+	return mMap->GetMap();
 }

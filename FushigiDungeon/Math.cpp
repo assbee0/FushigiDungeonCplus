@@ -20,3 +20,7 @@ Vector2 Vector2::Sum(Vector2 a, Vector2 b)
 
 const Vector2 Vector2::Zero = Vector2(0.0f, 0.0f);
 const Vector2 Vector2::One = Vector2(1.0f, 1.0f);
+const Vector2 Vector2::X = Vector2(1.0f, 0.0f);
+const Vector2 Vector2::Y = Vector2(0.0f, 1.0f);
+const Vector2 Vector2::NX = Vector2(-1.0f, 0.0f);
+const Vector2 Vector2::NY = Vector2(0.0f, -1.0f);

@@ -1,20 +1,13 @@
 #pragma once
-#include "SDL.h"
-#include "SDL_image.h"
+#include "GameObject.h"
 
-class Dungeon
+class Dungeon : public GameObject
 {
 public:
-	Dungeon(SDL_Renderer* render);
-	void CreateMap(SDL_Renderer* render);
+	Dungeon(class Game* game);
 
-	void SetTexture(SDL_Texture* tex) { mTexture = tex; }
+	int* GetMap();
 
 private:
-		
-	int mMap[300];
-	int mWidth;
-	int mHeight;
-	SDL_Texture* mTexture;
-	SDL_Surface* Loading_Surf;
+	class MapComponent* mMap;
 };

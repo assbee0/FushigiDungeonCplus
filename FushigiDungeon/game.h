@@ -1,6 +1,5 @@
 #pragma once
 #include "SDL.h"
-#include "Dungeon.h"
 #include "Time.h"
 #include <string>
 #include <vector>
@@ -40,7 +39,7 @@ private:
 	SDL_Renderer* mRenderer;
 	bool mIsRunning;
 	bool mIsUpdatingObjects;
-	Dungeon mDungeon;
 
 	class Player* mPlayer;
+	class Dungeon* mDungeon;
 };
