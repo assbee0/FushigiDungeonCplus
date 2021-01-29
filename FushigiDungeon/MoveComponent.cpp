@@ -1,5 +1,6 @@
 #include "MoveComponent.h"
 #include "GameObject.h"
+#include "Enemy.h"
 
 MoveComponent::MoveComponent(GameObject* gameObject):
 	Component(gameObject),
@@ -45,8 +46,11 @@ void MoveComponent::SetDir(Direction dir)
 		break;
 	}
 	mDst = curPos + mDir * 32;
-	if(WallCheck())
+	if (WallCheck() && ColliderCheck())
+	{
 		mIsMoving = true;
+		mGameObject->SetInputEnabled(false);
+	}
 }
 
 void MoveComponent::MoveOneGrid()
@@ -65,6 +69,7 @@ void MoveComponent::MoveOneGrid()
 		mDir = Vector2::Zero;
 		mPixelsCount = 0;
 		mIsMoving = false;
+		mGameObject->SetInputEnabled(true);
 	}
 }
 
@@ -79,4 +84,15 @@ bool MoveComponent::WallCheck()
 		return true;
 	else
 		return false;
+}
+
+bool MoveComponent::ColliderCheck()
+{
+	mEnemies = mGameObject->GetGame()->GetEnemies();
+	for (auto enemy : mEnemies)
+	{
+		if (mDst == enemy->GetPosition())
+			return false;
+	}
+	return true;
 }

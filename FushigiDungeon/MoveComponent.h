@@ -1,6 +1,7 @@
 #pragma once
 #include "Component.h"
 #include "Math.h"
+#include <vector>
 
 class MoveComponent : public Component
 {
@@ -24,8 +25,10 @@ private:
 
 	void MoveOneGrid();
 	bool WallCheck();
+	bool ColliderCheck();
 
 	int* mMapArray;
+	std::vector<class Enemy*> mEnemies;
 
 	Vector2 mDir;
 	Vector2 mDst;

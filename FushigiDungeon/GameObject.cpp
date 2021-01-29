@@ -6,7 +6,8 @@ GameObject::GameObject(Game *game):
 	mState(State::EActive),
 	mPosition(Vector2::Zero),
 	mScale(Vector2::One),
-	mRotation(0.0f)
+	mRotation(0.0f),
+	mInputEnabled(true)
 {
 	mGame->CreateGameObject(this);
 }

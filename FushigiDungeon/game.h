@@ -17,7 +17,10 @@ public:
 	void RemoveGameObject(class GameObject* gameObject);
 	void CreateSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
+	void CreateEnemy(class Enemy* enemy);
 	SDL_Texture* GetTexture(const std::string &filename);
+
+	std::vector<class Enemy*> GetEnemies() { return mEnemies; }
 
 private:
 	void Event();
@@ -34,6 +37,7 @@ private:
 	std::vector<class GameObject*> mGameObjects;
 	std::vector<class GameObject*> mPendingObjects;
 	std::vector<class SpriteComponent*> mSprites;
+	std::vector<class Enemy*> mEnemies;
 
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;

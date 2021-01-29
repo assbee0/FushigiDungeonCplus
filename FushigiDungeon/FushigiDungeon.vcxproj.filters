@@ -51,6 +51,12 @@
     <ClCompile Include="Dungeon.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Enemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -78,6 +84,12 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="MapComponent.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Enemy.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleComponent.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

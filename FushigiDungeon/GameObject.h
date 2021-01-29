@@ -20,6 +20,7 @@ public:
 	virtual void Update();
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
+	
 
 	class Game* GetGame() const { return mGame; }
 	State GetState() const { return mState; }
@@ -30,7 +31,10 @@ public:
 	void SetScale(Vector2 s) { mScale = s; }
 	float GetRotation() const { return mRotation; }
 	void SetRotation(float r) { mRotation = r; }
+	void SetInputEnabled(bool e) { mInputEnabled = e; }
 
+protected:
+	bool mInputEnabled;
 
 private:
 	class Game* mGame;
@@ -38,6 +42,7 @@ private:
 	Vector2 mPosition;
 	Vector2 mScale;
 	float mRotation;
+
 
 	std::vector<class Component*> mComponents;
 };

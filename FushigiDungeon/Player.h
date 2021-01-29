@@ -9,16 +9,10 @@ public:
 	void ProcessInput(const Uint8* state);
 	void Update() override;
 
-	void SetMap(int* map);
+	class MoveComponent* GetMoveComponent() const { return mc; }
 
 private:
-	const int PLAYER_SPEED = 200;
-	bool mIsWalking;
-	Vector2 mVec;
-	//每走完一整格才会更新的位置变量
-	Vector2 mPos;
-	Vector2 mDst;
-	float mPixelsCount;
-
 	class MoveComponent* mc;
+	class BattleComponent* bc;
+
 };

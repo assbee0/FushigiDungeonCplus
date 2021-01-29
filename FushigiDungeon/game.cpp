@@ -1,7 +1,9 @@
 #include "Game.h"
 #include "SDL_image.h"
 #include "SpriteComponent.h"
+#include "MoveComponent.h"
 #include "Player.h"
+#include "Enemy.h"
 #include "Dungeon.h"
 
 Game::Game():
@@ -9,7 +11,8 @@ Game::Game():
 	mRenderer(nullptr),
 	mIsRunning(true),
 	mIsUpdatingObjects(false),
-	mPlayer(nullptr)
+	mPlayer(nullptr),
+	mDungeon(nullptr)
 {
 
 }
@@ -123,6 +126,11 @@ void Game::RemoveSprite(SpriteComponent* sprite)
 	mSprites.erase(iter);
 }
 
+void Game::CreateEnemy(Enemy* enemy)
+{
+	mEnemies.emplace_back(enemy);
+}
+
 SDL_Texture* Game::GetTexture(const std::string& filename)
 {
 	SDL_Texture* tex = nullptr;
@@ -226,13 +234,16 @@ void Game::LoadData()
 	LoadTexture("Sprites/Ground.png","Ground");
 	LoadTexture("Sprites/Wall.png","Wall");
 	LoadTexture("Sprites/chrA07.png","Player");
+	LoadTexture("Sprites/monster001.png","Enemy1");
 
 	mDungeon = new Dungeon(this);
 
 	mPlayer = new Player(this);
 	mPlayer->SetPosition(Vector2(320, 256));
-	mPlayer->SetMap(mDungeon->GetMap());
+	mPlayer->GetMoveComponent()->SetMap(mDungeon->GetMap());
 
+	Enemy* e1 = new Enemy(this);
+	e1->SetPosition(Vector2(160, 128));
 }
 
 void Game::UnloadData()
