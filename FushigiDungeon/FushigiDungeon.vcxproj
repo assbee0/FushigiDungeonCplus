@@ -88,13 +88,13 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\C++\SDL2-2.0.14\include;E:\C++\SDL2_image-2.0.5\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\C++\SDL2-2.0.14\include;E:\C++\SDL2_image-2.0.5\include;E:\C++\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>E:\C++\SDL2-2.0.14\lib\x86;E:\C++\SDL2_image-2.0.5\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>E:\C++\SDL2-2.0.14\lib\x86;E:\C++\SDL2_image-2.0.5\lib\x86;E:\C++\GLEW\lib\win\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;SDL2.lib;SDL2main.lib;SDL2_image.lib;glew32.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -143,6 +143,9 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="BattleComponent.cpp" />
+    <ClCompile Include="BattleManager.cpp" />
+    <ClCompile Include="Camera.cpp" />
+    <ClCompile Include="CameraLock.cpp" />
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
@@ -154,11 +157,14 @@
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
-    <ClCompile Include="Time.cpp" />
-    <ClCompile Include="Time.h" />
+    <ClCompile Include="Timer.cpp" />
+    <ClCompile Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="BattleComponent.h" />
+    <ClInclude Include="BattleManager.h" />
+    <ClInclude Include="Camera.h" />
+    <ClInclude Include="CameraLock.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Game.h" />

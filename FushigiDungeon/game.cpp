@@ -5,14 +5,21 @@
 #include "Player.h"
 #include "Enemy.h"
 #include "Dungeon.h"
+#include "Camera.h"
+#include "CameraLock.h"
+#include "GL/glew.h"
+#include "MapComponent.h"
+#include <time.h>
 
 Game::Game():
 	mWindow(nullptr),
 	mRenderer(nullptr),
+	mContext(0),
 	mIsRunning(true),
 	mIsUpdatingObjects(false),
 	mPlayer(nullptr),
-	mDungeon(nullptr)
+	mDungeon(nullptr),
+	mCamera(nullptr)
 {
 
 }
@@ -24,14 +31,14 @@ bool Game::Initialize()
 		return false;
 	}
 
-	mWindow = SDL_CreateWindow("FushigiDungeon", 400, 200, 640, 480, 0);
+	mWindow = SDL_CreateWindow("FushigiDungeon", 400, 200, WINDOWS_WIDTH, WINDOWS_HEIGHT, SDL_WINDOW_OPENGL);
 	if (!mWindow)
 	{
 		SDL_Log("Failed to create window: %s", SDL_GetError());
 		return false;
 	}
-
-	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+		
+	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 	if (!mRenderer)
 	{
 		SDL_Log("Failed to create renderer: %s", SDL_GetError());
@@ -44,8 +51,8 @@ bool Game::Initialize()
 		return false;
 	}
 
-	Time::deltaTime = 0;
-	Time::ticksCount = 0;
+	Timer::deltaTime = 0;
+	Timer::ticksCount = 0;
 
 	LoadData();
 
@@ -70,6 +77,7 @@ void Game::Shutdown()
 //结束并关闭游戏
 {
 	SDL_DestroyRenderer(mRenderer);
+	SDL_GL_DeleteContext(mContext);
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 	IMG_Quit();
@@ -131,6 +139,16 @@ void Game::CreateEnemy(Enemy* enemy)
 	mEnemies.emplace_back(enemy);
 }
 
+void Game::RemoveEnemy(Enemy* enemy)
+{
+	auto iter = std::find(mEnemies.begin(), mEnemies.end(), enemy);
+	if (iter != mEnemies.end())
+	{
+		std::iter_swap(iter, mEnemies.end() - 1);
+		mEnemies.pop_back();
+	}
+}
+
 SDL_Texture* Game::GetTexture(const std::string& filename)
 {
 	SDL_Texture* tex = nullptr;
@@ -172,6 +190,10 @@ void Game::Update()
 	{
 		gameObject->UpdateGameObject();
 	}
+	for (auto gameObject : mGameObjects)
+	{
+		gameObject->LateUpdateGameObject();
+	}
 	mIsUpdatingObjects = false;
 
 	for (auto pendingObject : mPendingObjects)
@@ -201,7 +223,7 @@ void Game::Draw()
 		mRenderer,
 		0,		// R
 		0,		// G 
-		255,	// B
+		255,    // B
 		255		// A
 	);
 
@@ -210,23 +232,24 @@ void Game::Draw()
 
 	for (auto sprite : mSprites)
 	{
-		sprite->Draw(mRenderer);
+		sprite->Draw(mRenderer, mCamera);
 	}
 
 	// 交换buffer
 	SDL_RenderPresent(mRenderer);
+
 }
 
 void Game::Tick(int FPS)
 //处理每帧时间，不够则等到达到指定FPS
 {
 	int fpsTime = 1000 / FPS;
-	while (!SDL_TICKS_PASSED(SDL_GetTicks(), Time::ticksCount + fpsTime))
+	while (!SDL_TICKS_PASSED(SDL_GetTicks(), Timer::ticksCount + fpsTime))
 		;
 
-	Time::deltaTime = (SDL_GetTicks() - Time::ticksCount) / 1000.0f;
+	Timer::deltaTime = (SDL_GetTicks() - Timer::ticksCount) / 1000.0f;
 
-	Time::ticksCount = SDL_GetTicks();
+	Timer::ticksCount = SDL_GetTicks();
 }
 
 void Game::LoadData()
@@ -237,13 +260,22 @@ void Game::LoadData()
 	LoadTexture("Sprites/monster001.png","Enemy1");
 
 	mDungeon = new Dungeon(this);
+	int mapW = mDungeon->GetComponent<MapComponent>()->GetWidth();
+	int mapH = mDungeon->GetComponent<MapComponent>()->GetHeight();
 
 	mPlayer = new Player(this);
 	mPlayer->SetPosition(Vector2(320, 256));
-	mPlayer->GetMoveComponent()->SetMap(mDungeon->GetMap());
+	mPlayer->GetComponent<MoveComponent>()->SetMap(mDungeon->GetMap());
 
 	Enemy* e1 = new Enemy(this);
 	e1->SetPosition(Vector2(160, 128));
+	e1->GetComponent<MoveComponent>()->SetMap(mDungeon->GetMap());
+
+	Camera* cam = new Camera(this);
+	mCamera = cam->GetComponent<CameraLock>();
+	mCamera->SetPlayer(mPlayer);
+	mCamera->SetMapW(mapW);
+	mCamera->SetMapH(mapH);
 }
 
 void Game::UnloadData()

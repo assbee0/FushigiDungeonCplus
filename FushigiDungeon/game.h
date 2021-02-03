@@ -1,10 +1,13 @@
 #pragma once
 #include "SDL.h"
-#include "Time.h"
+#include "Timer.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
 #include "GameObject.h"
+
+#define WINDOWS_WIDTH 640
+#define WINDOWS_HEIGHT 480
 
 class Game 
 {
@@ -18,9 +21,12 @@ public:
 	void CreateSprite(class SpriteComponent* sprite);
 	void RemoveSprite(class SpriteComponent* sprite);
 	void CreateEnemy(class Enemy* enemy);
+	void RemoveEnemy(class Enemy* enemy);
 	SDL_Texture* GetTexture(const std::string &filename);
 
-	std::vector<class Enemy*> GetEnemies() { return mEnemies; }
+	std::vector<class Enemy*> GetEnemies() const { return mEnemies; }
+	class Dungeon* GetDungeon() const { return mDungeon; }
+	class Player* GetPlayer() const { return mPlayer; }
 
 private:
 	void Event();
@@ -41,9 +47,11 @@ private:
 
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
+	SDL_GLContext mContext;
 	bool mIsRunning;
 	bool mIsUpdatingObjects;
 
 	class Player* mPlayer;
 	class Dungeon* mDungeon;
+	class CameraLock* mCamera;
 };

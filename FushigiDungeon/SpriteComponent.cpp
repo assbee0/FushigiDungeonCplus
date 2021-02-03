@@ -1,5 +1,7 @@
 #include "SpriteComponent.h"
 #include "GameObject.h"
+#include "CameraLock.h"
+
 SpriteComponent::SpriteComponent(GameObject* gameObject, int drawOrder):
 	Component(gameObject),
 	mTexture(nullptr),
@@ -8,6 +10,7 @@ SpriteComponent::SpriteComponent(GameObject* gameObject, int drawOrder):
 	mDrawOrder(drawOrder)
 {
 	mGameObject->GetGame()->CreateSprite(this);
+	mNumber = 1;
 }
 
 SpriteComponent::~SpriteComponent()
@@ -15,15 +18,16 @@ SpriteComponent::~SpriteComponent()
 	mGameObject->GetGame()->RemoveSprite(this);
 }
 
-void SpriteComponent::Draw(SDL_Renderer* renderer)
+void SpriteComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
 {
 	if (!mTexture)
 		return;
 	SDL_Rect dstrect;
 	dstrect.w = static_cast<int>(mTexWidth * mGameObject->GetScale().x);
 	dstrect.h = static_cast<int>(mTexHeight * mGameObject->GetScale().y);
-	dstrect.x = static_cast<int>(mGameObject->GetPosition().x);
-	dstrect.y = static_cast<int>(mGameObject->GetPosition().y);
+	Vector2 drawPos = cam->WorldToCamera(mGameObject->GetPosition());
+	dstrect.x = static_cast<int>(drawPos.x);
+	dstrect.y = static_cast<int>(drawPos.y);
 	SDL_RenderCopyEx(renderer, mTexture, nullptr, &dstrect, mGameObject->GetRotation(), nullptr, SDL_FLIP_NONE);
 }
 

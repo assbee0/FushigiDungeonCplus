@@ -3,7 +3,8 @@
 
 Component::Component(GameObject* gameObject):
 	mGameObject(gameObject),
-	mUpdateOrder(100)
+	mUpdateOrder(100),
+	mNumber(0)
 {
 	mGameObject->AddComponent(this);
 }
@@ -14,6 +15,11 @@ Component::~Component()
 }
 
 void Component::Update()
+{
+
+}
+
+void Component::LateUpdate()
 {
 
 }

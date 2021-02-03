@@ -9,7 +9,6 @@ public:
 	void ProcessInput(const Uint8* state);
 	void Update() override;
 
-	class MoveComponent* GetMoveComponent() const { return mc; }
 
 private:
 	class MoveComponent* mc;

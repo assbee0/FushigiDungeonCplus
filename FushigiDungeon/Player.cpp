@@ -8,8 +8,8 @@ Player::Player(Game *game):
 	GameObject(game)
 {
 	SpriteComponent* ps = new SpriteComponent(this, 100);
-	mc = new MoveComponent(this);
-	bc = new BattleComponent(this);
+	mc = new MoveComponent(this, true);
+	bc = new BattleComponent(this, true);
 	ps->SetTexture(game->GetTexture("Player"));
 }
 
@@ -19,22 +19,22 @@ void Player::ProcessInput(const Uint8* state)
 		return;
 	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP])
 	{
-		mc->SetDir(MoveComponent::Direction::Up);
+		mc->SetDir(Vector2::NY);
 		bc->SetFacing(Vector2::NY);
 	}
 	else if (state[SDL_SCANCODE_S] || state[SDL_SCANCODE_DOWN])
 	{
-		mc->SetDir(MoveComponent::Direction::Down);
+		mc->SetDir(Vector2::Y);
 		bc->SetFacing(Vector2::Y);
 	}
 	else if (state[SDL_SCANCODE_A] || state[SDL_SCANCODE_LEFT])
 	{
-		mc->SetDir(MoveComponent::Direction::Left);
+		mc->SetDir(Vector2::NX);
 		bc->SetFacing(Vector2::NX);
 	}
 	else if (state[SDL_SCANCODE_D] || state[SDL_SCANCODE_RIGHT])
 	{
-		mc->SetDir(MoveComponent::Direction::Right);
+		mc->SetDir(Vector2::X);
 		bc->SetFacing(Vector2::X);
 	}
 	else if (state[SDL_SCANCODE_SPACE])

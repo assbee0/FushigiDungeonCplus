@@ -16,11 +16,28 @@ public:
 	virtual ~GameObject();
 
 	void UpdateGameObject();
+	void LateUpdateGameObject();
 	void UpdateComponents();
+	void LateUpdateComponents();
 	virtual void Update();
+	virtual void LateUpdate();
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
-	
+
+
+	template<typename T> T* GetComponent()
+	{
+		for (auto com : mComponents)
+		{
+			T* component = dynamic_cast<T*>(com);
+			if (component != nullptr)
+			{
+				return component;
+			}
+		}
+		return nullptr;
+	}
+
 
 	class Game* GetGame() const { return mGame; }
 	State GetState() const { return mState; }
@@ -35,6 +52,7 @@ public:
 
 protected:
 	bool mInputEnabled;
+	std::vector<class Component*> mComponents;
 
 private:
 	class Game* mGame;
@@ -44,5 +62,4 @@ private:
 	float mRotation;
 
 
-	std::vector<class Component*> mComponents;
 };

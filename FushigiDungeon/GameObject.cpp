@@ -15,8 +15,10 @@ GameObject::GameObject(Game *game):
 GameObject::~GameObject()
 {
 	mGame->RemoveGameObject(this);
-	mComponents.clear();
-	mComponents.shrink_to_fit();
+	while (!mComponents.empty())
+	{
+		delete mComponents.back();
+	}
 }
 
 void GameObject::UpdateGameObject()
@@ -28,6 +30,15 @@ void GameObject::UpdateGameObject()
 	}
 }
 
+void GameObject::LateUpdateGameObject()
+{
+	if (mState == State::EActive)
+	{
+		LateUpdateComponents();
+		LateUpdate();
+	}
+}
+
 void GameObject::UpdateComponents()
 {
 	for (auto component : mComponents)
@@ -36,7 +47,20 @@ void GameObject::UpdateComponents()
 	}
 }
 
+void GameObject::LateUpdateComponents()
+{
+	for (auto component : mComponents)
+	{
+		component->LateUpdate();
+	}
+}
+
 void GameObject::Update()
+{
+
+}
+
+void GameObject::LateUpdate()
 {
 
 }

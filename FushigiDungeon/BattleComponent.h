@@ -2,10 +2,10 @@
 #include "Component.h"
 #include "Math.h"
 
-class BattleComponent : Component
+class BattleComponent : public Component
 {
 public:
-	BattleComponent(class GameObject* gameObject);
+	BattleComponent(class GameObject* gameObject, bool isPlayer);
 	void Update() override;
 
 	void SetFacing(Vector2 f) { mFacing = f; }
@@ -16,6 +16,7 @@ private:
 	void AttackTarget();
 	void AttackAnimation();
 
+	bool mIsPlayer;
 	class Enemy* mTarget;
 	Vector2 mFacing;
 	Vector2 mStartPos;

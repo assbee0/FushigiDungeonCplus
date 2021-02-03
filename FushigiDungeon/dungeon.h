@@ -10,4 +10,5 @@ public:
 
 private:
 	class MapComponent* mMap;
+	class BattleManager* bmc;
 };

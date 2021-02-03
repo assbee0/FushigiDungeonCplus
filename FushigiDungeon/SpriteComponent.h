@@ -8,7 +8,7 @@ public:
 	SpriteComponent(class GameObject* gameObject, int drawOrder);
 	~SpriteComponent();
 
-	virtual void Draw(SDL_Renderer* renderer);
+	virtual void Draw(SDL_Renderer* renderer, class CameraLock* cam);
 	virtual void SetTexture(SDL_Texture* texture);
 
 	int GetTexWidth() const { return mTexWidth; }

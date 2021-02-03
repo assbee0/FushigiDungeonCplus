@@ -6,20 +6,12 @@
 class MoveComponent : public Component
 {
 public:
-	MoveComponent(class GameObject* gameObject);
+	MoveComponent(class GameObject* gameObject, bool isPlayer);
 	void Update() override;
-	enum class Direction
-	{
-		Up,
-		Down,
-		Left,
-		Right
-	};
-
 	
 	void SetMap(int* map) { mMapArray = map; }
 	void SetSpeed(float speed) { mSpeed = speed; }
-	void SetDir(Direction dir);
+	void SetDir(Vector2 dir);
 
 private:
 
@@ -33,6 +25,7 @@ private:
 	Vector2 mDir;
 	Vector2 mDst;
 	bool mIsMoving;
+	bool mIsPlayer;
 	float mPixelsCount;
 	float mSpeed;
 };

@@ -27,12 +27,6 @@
     <ClCompile Include="GameObject.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="Time.h">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="Time.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="Math.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -55,6 +49,21 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="BattleComponent.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="BattleManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.h">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Timer.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="Camera.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="CameraLock.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -90,6 +99,15 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="BattleComponent.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="BattleManager.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Camera.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="CameraLock.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>
