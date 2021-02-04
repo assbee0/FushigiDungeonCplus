@@ -6,6 +6,13 @@ Vector2::Vector2():
 
 }
 
+Vector2::Vector2(int X, int Y) :
+	x(X),
+	y(Y)
+{
+
+}
+
 Vector2::Vector2(float X, float Y) :
 	x(X),
 	y(Y)

@@ -1,10 +1,8 @@
 #pragma once
-#include "SDL.h"
-#include "Timer.h"
 #include <string>
 #include <vector>
 #include <unordered_map>
-#include "GameObject.h"
+#include "SDL.h"
 
 #define WINDOWS_WIDTH 640
 #define WINDOWS_HEIGHT 480

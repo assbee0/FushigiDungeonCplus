@@ -6,6 +6,7 @@ public:
 	float y;
 
 	Vector2();
+	Vector2(int X, int Y);
 	Vector2(float X, float Y);
 
 	static Vector2 Sum(Vector2 a, Vector2 b);

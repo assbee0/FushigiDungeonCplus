@@ -9,7 +9,7 @@
 #include "CameraLock.h"
 #include "GL/glew.h"
 #include "MapComponent.h"
-#include <time.h>
+#include "Timer.h"
 
 Game::Game():
 	mWindow(nullptr),
@@ -245,7 +245,7 @@ void Game::Tick(int FPS)
 {
 	int fpsTime = 1000 / FPS;
 	while (!SDL_TICKS_PASSED(SDL_GetTicks(), Timer::ticksCount + fpsTime))
-		;
+		SDL_Delay(1);
 
 	Timer::deltaTime = (SDL_GetTicks() - Timer::ticksCount) / 1000.0f;
 

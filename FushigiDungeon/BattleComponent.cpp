@@ -3,6 +3,7 @@
 #include "Dungeon.h"
 #include "Enemy.h"
 #include "BattleManager.h"
+#include "Timer.h"
 
 BattleComponent::BattleComponent(GameObject* gameObject, bool isPlayer):
 	Component(gameObject),

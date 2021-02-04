@@ -11,6 +11,7 @@ public:
 	void SetTexture(SDL_Texture* texture) override;
 
 	int* GetMap() { return mMapArray; }
+	void SetMap(int* map) { mMapArray = map; }
 	int GetWidth() const { return mWidth * 32; }
 	void SetWidth(int w) { mWidth = w; }
 	int GetHeight() const { return mHeight * 32; }

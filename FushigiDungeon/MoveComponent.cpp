@@ -3,6 +3,7 @@
 #include "Dungeon.h"
 #include "BattleManager.h"
 #include "Enemy.h"
+#include "Timer.h"
 
 MoveComponent::MoveComponent(GameObject* gameObject, bool isPlayer):
 	Component(gameObject),
@@ -68,10 +69,10 @@ bool MoveComponent::WallCheck()
 {
 	int gridX = static_cast<int>(mDst.x / 32);
 	int gridY = static_cast<int>(mDst.y / 32);
-	int index = gridY * 40 + gridX;
-	if (index > 1200 || index < 0)
+	int index = gridY * 20 + gridX;
+	if (index > 300 || index < 0)
 		return false;
-	if (mMapArray[index] == 0)
+	if (mMapArray[index] == 2)
 		return true;
 	else
 		return false;
