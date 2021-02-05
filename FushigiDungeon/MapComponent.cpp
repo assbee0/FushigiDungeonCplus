@@ -1,14 +1,22 @@
 #include "MapComponent.h"
 #include "GameObject.h"
 #include "CameraLock.h"
+#include "MapMaker.h"
 
-MapComponent::MapComponent(GameObject* gameObject, int width, int height):
+MapComponent::MapComponent(GameObject* gameObject, Map* map):
 	SpriteComponent(gameObject, 0),
-	mMapArray(nullptr),
-	mWidth(width),
-	mHeight(height)
+	mMap(map),
+	mMapArray(map->mapArray),
+	mWidth(map->width),
+	mHeight(map->height)
 {
-	mNumber = 4;
+
+}
+
+MapComponent::~MapComponent()
+{
+	delete mMap;
+	mGameObject->RemoveComponent(this);
 }
 
 void MapComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
@@ -42,4 +50,12 @@ void MapComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
 void MapComponent::SetTexture(SDL_Texture* texture)
 {
 	mTextures.emplace_back(texture);
+}
+
+void MapComponent::SetMap(Map* map)
+{
+	mMap = map; 
+	mMapArray = mMap->mapArray; 
+	mWidth = mMap->width; 
+	mHeight = mMap->height;
 }

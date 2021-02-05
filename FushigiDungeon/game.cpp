@@ -9,6 +9,8 @@
 #include "CameraLock.h"
 #include "GL/glew.h"
 #include "MapComponent.h"
+#include "MapMaker.h"
+#include "Ladder.h"
 #include "Timer.h"
 
 Game::Game():
@@ -19,7 +21,8 @@ Game::Game():
 	mIsUpdatingObjects(false),
 	mPlayer(nullptr),
 	mDungeon(nullptr),
-	mCamera(nullptr)
+	mCamera(nullptr),
+	mLadder(nullptr)
 {
 
 }
@@ -37,7 +40,7 @@ bool Game::Initialize()
 		SDL_Log("Failed to create window: %s", SDL_GetError());
 		return false;
 	}
-		
+
 	mRenderer = SDL_CreateRenderer(mWindow, -1, SDL_RENDERER_ACCELERATED);
 	if (!mRenderer)
 	{
@@ -160,6 +163,21 @@ SDL_Texture* Game::GetTexture(const std::string& filename)
 	return tex;
 }
 
+void Game::NewFloor()
+{
+	mDungeon->NewFloor();
+	Map* map = mDungeon->GetMap();
+
+	mLadder->SetPosition(map->GetRandomPos());
+
+	mPlayer->SetPosition(map->GetRandomPos());
+	mPlayer->GetComponent<MoveComponent>()->SetMap(map);
+
+	mCamera->SetPlayer(mPlayer);
+	mCamera->SetMapW(map->width * 32);
+	mCamera->SetMapH(map->height * 32);
+}
+
 void Game::Event()
 //处理包括输入的各种事件
 {
@@ -183,7 +201,7 @@ void Game::Event()
 
 void Game::Update()
 {
-	Tick(60);
+	Tick(50);
 
 	mIsUpdatingObjects = true;
 	for (auto gameObject : mGameObjects)
@@ -219,15 +237,9 @@ void Game::Update()
 
 void Game::Draw()
 {
-	SDL_SetRenderDrawColor(
-		mRenderer,
-		0,		// R
-		0,		// G 
-		255,    // B
-		255		// A
-	);
+	SDL_SetRenderDrawColor(mRenderer, 0, 0, 255, 255);
 
-	// 清除当前buffer
+	// Clear the buffer
 	SDL_RenderClear(mRenderer);
 
 	for (auto sprite : mSprites)
@@ -235,7 +247,7 @@ void Game::Draw()
 		sprite->Draw(mRenderer, mCamera);
 	}
 
-	// 交换buffer
+	// Swap the buffer
 	SDL_RenderPresent(mRenderer);
 
 }
@@ -258,24 +270,30 @@ void Game::LoadData()
 	LoadTexture("Sprites/Wall.png","Wall");
 	LoadTexture("Sprites/chrA07.png","Player");
 	LoadTexture("Sprites/monster001.png","Enemy1");
+	LoadTexture("Sprites/ladder.png","Ladder");
 
 	mDungeon = new Dungeon(this);
-	int mapW = mDungeon->GetComponent<MapComponent>()->GetWidth();
-	int mapH = mDungeon->GetComponent<MapComponent>()->GetHeight();
-
 	mPlayer = new Player(this);
-	mPlayer->SetPosition(Vector2(320, 256));
-	mPlayer->GetComponent<MoveComponent>()->SetMap(mDungeon->GetMap());
-
-	Enemy* e1 = new Enemy(this);
-	e1->SetPosition(Vector2(160, 128));
-	e1->GetComponent<MoveComponent>()->SetMap(mDungeon->GetMap());
-
+	//Enemy* e1 = new Enemy(this);
 	Camera* cam = new Camera(this);
 	mCamera = cam->GetComponent<CameraLock>();
+	mLadder = new Ladder(this);
+
+	Map* map = mDungeon->GetMap();
+
+	mLadder->SetPosition(map->GetRandomPos());
+
+	mPlayer->SetPosition(map->GetRandomPos());
+	mPlayer->GetComponent<MoveComponent>()->SetMap(map);
+
+	//e1->SetPosition(map->GetRandomPos());
+	//e1->GetComponent<MoveComponent>()->SetMap(map);
+
 	mCamera->SetPlayer(mPlayer);
-	mCamera->SetMapW(mapW);
-	mCamera->SetMapH(mapH);
+	mCamera->SetMapW(map->width * 32);
+	mCamera->SetMapH(map->height * 32);
+
+	printf("Floor 1\n");
 }
 
 void Game::UnloadData()

@@ -150,6 +150,7 @@
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="MapComponent.cpp" />
@@ -171,6 +172,7 @@
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="Ladder.h" />
     <ClInclude Include="MapComponent.h" />
     <ClInclude Include="MapMaker.h" />
     <ClInclude Include="Math.h" />

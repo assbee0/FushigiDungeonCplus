@@ -21,10 +21,12 @@ public:
 	void CreateEnemy(class Enemy* enemy);
 	void RemoveEnemy(class Enemy* enemy);
 	SDL_Texture* GetTexture(const std::string &filename);
+	void NewFloor();
 
 	std::vector<class Enemy*> GetEnemies() const { return mEnemies; }
 	class Dungeon* GetDungeon() const { return mDungeon; }
 	class Player* GetPlayer() const { return mPlayer; }
+	class Ladder* GetLadder() const { return mLadder; }
 
 private:
 	void Event();
@@ -52,4 +54,5 @@ private:
 	class Player* mPlayer;
 	class Dungeon* mDungeon;
 	class CameraLock* mCamera;
+	class Ladder* mLadder;
 };

@@ -18,8 +18,8 @@ void CameraLock::LateUpdate()
 	mCenter = mPlayer->GetPosition();
 	mBuffer.x = (mCenter.x - WINDOWS_WIDTH / 2) >= 0? (mCenter.x - WINDOWS_WIDTH / 2) : 0;
 	mBuffer.y = (mCenter.y - 256) >= 0? (mCenter.y - 256) : 0;
-	mBuffer.x = (mMapW - mBuffer.x) >= 640 ? mBuffer.x : mMapW - 640;
-	mBuffer.y = (mMapH - mBuffer.y) >= 480 ? mBuffer.y : mMapH - 480;
+	mBuffer.x = (mMapW - mBuffer.x) >= WINDOWS_WIDTH ? mBuffer.x : mMapW - WINDOWS_WIDTH;
+	mBuffer.y = (mMapH - mBuffer.y) >= WINDOWS_HEIGHT ? mBuffer.y : mMapH - WINDOWS_HEIGHT;
 }
 
 Vector2 CameraLock::WorldToCamera(Vector2 worldPos)

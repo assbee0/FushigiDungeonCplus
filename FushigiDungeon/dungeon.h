@@ -5,10 +5,13 @@ class Dungeon : public GameObject
 {
 public:
 	Dungeon(class Game* game);
+	void NewFloor();
 
-	int* GetMap();
+	class Map* GetMap() const { return mMap; }
 
 private:
-	class MapComponent* mMap;
-	class BattleManager* bmc;
+	class Map* mMap;
+	int mFloor;
+	int mWidth;
+	int mHeight;
 };

@@ -5,21 +5,31 @@
 #include "MapMaker.h"
 
 Dungeon::Dungeon(Game* game): 
-	GameObject(game)
+	GameObject(game),
+	mFloor(1),
+	mWidth(20),
+	mHeight(15),
+	mMap(nullptr)
 {
-	MapMaker* mapMaker = new MapMaker(this);
-	mapMaker->BuildMap();
+	MapMaker* mapMaker = new MapMaker(this, mWidth, mHeight, 10, 10);
+	mMap = mapMaker->BuildMap();
 
-	mMap = new MapComponent(this, 20, 15);
-	mMap->SetMap(mapMaker->GetMap());
-	mMap->SetTexture(game->GetTexture("Ground"));
-	mMap->SetTexture(game->GetTexture("Wall"));
+	MapComponent* mc = new MapComponent(this, mMap);
+	mc->SetTexture(game->GetTexture("Ground"));
+	mc->SetTexture(game->GetTexture("Wall"));
 
-	bmc = new BattleManager(this);
-	GetComponent<BattleManager>();
+	BattleManager* bmc = new BattleManager(this);
 }
 
-int* Dungeon::GetMap()
+void Dungeon::NewFloor()
 {
-	return mMap->GetMap();
+	delete mMap->mapArray;
+	delete mMap;
+	mWidth = 20 + mFloor * 3;
+	mHeight = 15 + mFloor * 3;
+	GetComponent<MapMaker>()->SetParameters(mWidth, mHeight, 10, 10);
+	mMap = GetComponent<MapMaker>()->BuildMap();
+	GetComponent<MapComponent>()->SetMap(mMap);
+	mFloor++;
+	printf("Floor %d\n", mFloor);
 }

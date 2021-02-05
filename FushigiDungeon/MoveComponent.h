@@ -9,7 +9,7 @@ public:
 	MoveComponent(class GameObject* gameObject, bool isPlayer);
 	void Update() override;
 	
-	void SetMap(int* map) { mMapArray = map; }
+	void SetMap(class Map* map) { mMap = map; }
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetDir(Vector2 dir);
 
@@ -19,7 +19,7 @@ private:
 	bool WallCheck();
 	bool ColliderCheck();
 
-	int* mMapArray;
+	class Map* mMap;
 	std::vector<class Enemy*> mEnemies;
 
 	Vector2 mDir;
