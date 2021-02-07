@@ -43,3 +43,9 @@ public:
 		return (a.x == b.x && a.y == b.y);
 	}
 };
+
+class Mathf
+{
+public:
+	static float Abs(float a);
+};

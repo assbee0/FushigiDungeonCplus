@@ -32,12 +32,9 @@ void BattleComponent::SetBattling()
 	mIsBattling = true;
 	mStartPos = mGameObject->GetPosition();
 
-	if (mIsPlayer)
-	{
-	}
 }
 
-Enemy* BattleComponent::CheckTarget()
+BattleComponent* BattleComponent::CheckTarget()
 {
 	Vector2 curPos = mGameObject->GetPosition();
 	Vector2 dstPos;
@@ -46,7 +43,7 @@ Enemy* BattleComponent::CheckTarget()
 	for (auto enemy : enemies)
 	{
 		if (dstPos == enemy->GetPosition())
-			return enemy;
+			return enemy->GetComponent<BattleComponent>();
 	}
 	return nullptr;
 }
@@ -55,6 +52,11 @@ void BattleComponent::AttackTarget()
 {
 	int damage = mAttack;
 	mTarget->BeAttacked(damage);
+}
+
+void BattleComponent::BeAttacked(int damage)
+{
+	mHp -= damage;
 }
 
 void BattleComponent::AttackAnimation()
@@ -75,20 +77,24 @@ void BattleComponent::AttackAnimation()
 	}
 	else
 	{
-		mGameObject->SetPosition(mStartPos);
-		mIsBattling = false;
-		mAnimeCount = 0;
-
-		mTarget = CheckTarget();
-		if (mTarget)
-		{
-			AttackTarget();
-			mTarget = nullptr;
-		}
-
-		mGameObject->GetGame()->GetDungeon()
-			->GetComponent<BattleManager>()->NewTurn();
-
-		mGameObject->SetInputEnabled(true);
+		AttackOver();
 	}
+}
+
+void BattleComponent::AttackOver()
+{
+	mGameObject->SetPosition(mStartPos);
+	mIsBattling = false;
+	mAnimeCount = 0;
+
+	mTarget = CheckTarget();
+	if (mTarget)
+	{
+		AttackTarget();
+		mTarget = nullptr;
+	}
+
+	mGameObject->GetGame()->GetDungeon()
+		->GetComponent<BattleManager>()->NewTurn();
+
 }

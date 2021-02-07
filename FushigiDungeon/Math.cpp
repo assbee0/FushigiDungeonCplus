@@ -31,3 +31,8 @@ const Vector2 Vector2::X = Vector2(1.0f, 0.0f);
 const Vector2 Vector2::Y = Vector2(0.0f, 1.0f);
 const Vector2 Vector2::NX = Vector2(-1.0f, 0.0f);
 const Vector2 Vector2::NY = Vector2(0.0f, -1.0f);
+
+float Mathf::Abs(float a)
+{
+	return (a >= 0) ? a : -a;
+}

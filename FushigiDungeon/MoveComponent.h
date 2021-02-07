@@ -9,15 +9,17 @@ public:
 	MoveComponent(class GameObject* gameObject, bool isPlayer);
 	void Update() override;
 	
+	bool GetIsMoving() const { return mIsMoving; }
 	void SetMap(class Map* map) { mMap = map; }
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetDir(Vector2 dir);
 
-private:
+protected:
 
 	void MoveOneGrid();
 	bool WallCheck();
 	bool ColliderCheck();
+	virtual void ReachOneGrid();
 
 	class Map* mMap;
 	std::vector<class Enemy*> mEnemies;

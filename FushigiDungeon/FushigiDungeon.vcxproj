@@ -142,6 +142,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AIComponent.cpp" />
+    <ClCompile Include="AIState.cpp" />
     <ClCompile Include="BattleComponent.cpp" />
     <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -149,6 +151,7 @@
     <ClCompile Include="Component.cpp" />
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
+    <ClCompile Include="EnemyBattle.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -157,6 +160,7 @@
     <ClCompile Include="MapMaker.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
+    <ClCompile Include="NavComponent.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
@@ -164,12 +168,15 @@
     <ClCompile Include="Timer.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AIComponent.h" />
+    <ClInclude Include="AIState.h" />
     <ClInclude Include="BattleComponent.h" />
     <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Camera.h" />
     <ClInclude Include="CameraLock.h" />
     <ClInclude Include="Component.h" />
     <ClInclude Include="Dungeon.h" />
+    <ClInclude Include="EnemyBattle.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="Ladder.h" />
@@ -177,6 +184,7 @@
     <ClInclude Include="MapMaker.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="MoveComponent.h" />
+    <ClInclude Include="NavComponent.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="SpriteComponent.h" />

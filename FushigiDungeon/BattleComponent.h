@@ -9,15 +9,18 @@ public:
 	void Update() override;
 
 	void SetFacing(Vector2 f) { mFacing = f; }
+	bool GetBattling() const { return mIsBattling; }
 	void SetBattling();
 
-private:
-	class Enemy* CheckTarget();
+protected:
+	virtual class BattleComponent* CheckTarget();
 	void AttackTarget();
+	void BeAttacked(int damage);
 	void AttackAnimation();
+	virtual void AttackOver();
 
 	bool mIsPlayer;
-	class Enemy* mTarget;
+	class BattleComponent* mTarget;
 	Vector2 mFacing;
 	Vector2 mStartPos;
 	bool mIsBattling;

@@ -2,6 +2,7 @@
 #include "SDL_image.h"
 #include "SpriteComponent.h"
 #include "MoveComponent.h"
+#include "NavComponent.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Dungeon.h"
@@ -274,7 +275,7 @@ void Game::LoadData()
 
 	mDungeon = new Dungeon(this);
 	mPlayer = new Player(this);
-	//Enemy* e1 = new Enemy(this);
+	Enemy* e1 = new Enemy(this);
 	Camera* cam = new Camera(this);
 	mCamera = cam->GetComponent<CameraLock>();
 	mLadder = new Ladder(this);
@@ -286,8 +287,8 @@ void Game::LoadData()
 	mPlayer->SetPosition(map->GetRandomPos());
 	mPlayer->GetComponent<MoveComponent>()->SetMap(map);
 
-	//e1->SetPosition(map->GetRandomPos());
-	//e1->GetComponent<MoveComponent>()->SetMap(map);
+	e1->SetPosition(map->GetRandomPos());
+	e1->GetComponent<NavComponent>()->SetMap(map);
 
 	mCamera->SetPlayer(mPlayer);
 	mCamera->SetMapW(map->width * 32);

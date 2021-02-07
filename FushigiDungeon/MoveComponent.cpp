@@ -54,29 +54,15 @@ void MoveComponent::MoveOneGrid()
 	}
 	else
 	{
-		mGameObject->SetPosition(mDst);
-		mDir = Vector2::Zero;
-		mPixelsCount = 0;
-		mIsMoving = false;
-
-		if (mIsPlayer)
-		{
-			if (mDst == mGameObject->GetGame()->GetLadder()->GetPosition())
-			{
-				mGameObject->GetGame()->NewFloor();
-			}
-			mGameObject->GetGame()->GetDungeon()
-				->GetComponent<BattleManager>()->NewTurn();
-		}
-
-		mGameObject->SetInputEnabled(true);
+		ReachOneGrid();
 	}
 }
 
 bool MoveComponent::WallCheck()
 {
-	int gridX = static_cast<int>(mDst.x / 32);
-	int gridY = static_cast<int>(mDst.y / 32);
+	Vector2 tempDst = mGameObject->GetPosition() + mDir * 32;
+	int gridX = static_cast<int>(tempDst.x / 32);
+	int gridY = static_cast<int>(tempDst.y / 32);
 	int index = gridY * (mMap->width) + gridX;
 	if (index > ((mMap->width) * (mMap->height)) || index < 0)
 		return false;
@@ -95,4 +81,24 @@ bool MoveComponent::ColliderCheck()
 			return false;
 	}
 	return true;
+}
+
+void MoveComponent::ReachOneGrid()
+{
+	mGameObject->SetPosition(mDst);
+	mDir = Vector2::Zero;
+	mPixelsCount = 0;
+	mIsMoving = false;
+
+	if (mIsPlayer)
+	{
+		if (mDst == mGameObject->GetGame()->GetLadder()->GetPosition())
+		{
+			mGameObject->GetGame()->NewFloor();
+		}
+	}
+
+	mGameObject->GetGame()->GetDungeon()
+		->GetComponent<BattleManager>()->NewTurn();
+	//mGameObject->SetInputEnabled(true);
 }

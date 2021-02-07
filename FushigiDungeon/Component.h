@@ -10,6 +10,7 @@ public:
 	int GetUpdateOrder()const { return mUpdateOrder; }
 	void SetUpdateOrder(int order) { mUpdateOrder = order; }
 	int GetNumber() const { return mNumber; }
+	class GameObject* GetGameObject() const { return mGameObject; }
 
 protected:
 	class GameObject* mGameObject;
