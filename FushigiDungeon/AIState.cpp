@@ -105,7 +105,7 @@ void AIChase::Update()
 
 void AIChase::OnEnter()
 {
-
+	mComponent->GetNav()->Chase();
 }
 
 void AIChase::OnExit()
@@ -130,7 +130,6 @@ void AIAttack::Update()
 void AIAttack::OnEnter()
 {
 	mComponent->GetEb()->SetBattling();
-	printf("caonima");
 }
 
 void AIAttack::OnExit()

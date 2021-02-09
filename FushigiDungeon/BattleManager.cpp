@@ -22,8 +22,12 @@ void BattleManager::Update()
 			if (enemy->GetComponent<AIComponent>()->GetStartMove())
 				return;
 		}
-		mGameObject->GetGame()->GetPlayer()->SetInputEnabled(true);
-		mIsInTurn = false;
+		Player* player = mGameObject->GetGame()->GetPlayer();
+		if (!player->GetComponent<MoveComponent>()->GetIsMoving())
+		{
+			player->SetInputEnabled(true);
+			mIsInTurn = false;
+		}
 	}
 }
 

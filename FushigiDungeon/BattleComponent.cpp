@@ -13,7 +13,7 @@ BattleComponent::BattleComponent(GameObject* gameObject, bool isPlayer):
 	mStartPos(Vector2::Zero),
 	mIsBattling(false),
 	mAnimeCount(0),
-	mHp(10),
+	mHp(50),
 	mAttack(2)
 {
 	mNumber = 3;
@@ -57,7 +57,17 @@ void BattleComponent::AttackTarget()
 void BattleComponent::BeAttacked(int damage)
 {
 	mHp -= damage;
+	if (mIsPlayer)
+	{
+		printf("HP:%d / 50\n", mHp);
+		if (mHp <= 0)
+		{
+			printf("ÄãÀ­Ï¡ÁË\n");
+			mGameObject->GetGame()->SetIsRunning(false);
+		}
+	}
 }
+
 
 void BattleComponent::AttackAnimation()
 {

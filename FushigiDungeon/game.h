@@ -27,6 +27,7 @@ public:
 	class Dungeon* GetDungeon() const { return mDungeon; }
 	class Player* GetPlayer() const { return mPlayer; }
 	class Ladder* GetLadder() const { return mLadder; }
+	void SetIsRunning(bool flag) { mIsRunning = flag; }
 
 private:
 	void Event();

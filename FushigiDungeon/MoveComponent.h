@@ -13,12 +13,13 @@ public:
 	void SetMap(class Map* map) { mMap = map; }
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetDir(Vector2 dir);
+	Vector2 GetDst()const { return mDst; }
 
 protected:
 
 	void MoveOneGrid();
-	bool WallCheck();
-	bool ColliderCheck();
+	bool WallCheck(Vector2 dir);
+	bool ColliderCheck(Vector2 dir);
 	virtual void ReachOneGrid();
 
 	class Map* mMap;

@@ -8,6 +8,7 @@ public:
 	void NewFloor();
 
 	class Map* GetMap() const { return mMap; }
+	int GetFloor() const { return mFloor; }
 
 private:
 	class Map* mMap;

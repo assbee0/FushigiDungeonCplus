@@ -10,5 +10,6 @@ int main(int argc, char* argv[])
 		game.Loop();
 	}
 	game.Shutdown();
+	system("pause");
 	return 0;
 }

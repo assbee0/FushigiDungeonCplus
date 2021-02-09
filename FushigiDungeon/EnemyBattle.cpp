@@ -1,6 +1,7 @@
 #include "EnemyBattle.h"
 #include "GameObject.h"
 #include "Player.h"
+#include "MoveComponent.h"
 
 EnemyBattle::EnemyBattle(GameObject* gameObject):
 	BattleComponent(gameObject, false)
@@ -10,7 +11,9 @@ EnemyBattle::EnemyBattle(GameObject* gameObject):
 
 void EnemyBattle::Update()
 {
-	if (mIsBattling)
+	Player* player = mGameObject->GetGame()->GetPlayer();
+	bool pIsMoving = player->GetComponent<MoveComponent>()->GetIsMoving();
+	if (mIsBattling && !pIsMoving)
 	{
 		CheckTarget();
 		if (mTarget)
@@ -44,22 +47,23 @@ BattleComponent* EnemyBattle::CheckTarget()
 	Vector2 curPos = mGameObject->GetPosition();
 	Player* player = mGameObject->GetGame()->GetPlayer();
 	mTarget = player->GetComponent<BattleComponent>();
-	if(player->GetPosition() - curPos == Vector2(0, 32))
+	Vector2 playerDst = player->GetComponent<MoveComponent>()->GetDst();
+	if(playerDst - curPos == Vector2(0, 32))
 	{
 		mFacing = Vector2::Y;
 		return mTarget;
 	}
-	else if (player->GetPosition() - curPos == Vector2(0, -32))
+	else if (playerDst - curPos == Vector2(0, -32))
 	{
 		mFacing = Vector2::NY;
 		return mTarget;
 	}
-	else if (player->GetPosition() - curPos == Vector2(32, 0))
+	else if (playerDst - curPos == Vector2(32, 0))
 	{
 		mFacing = Vector2::X;
 		return mTarget;
 	}
-	else if (player->GetPosition() - curPos == Vector2(-32, 0))
+	else if (playerDst - curPos == Vector2(-32, 0))
 	{
 		mFacing = Vector2::NX;
 		return mTarget;

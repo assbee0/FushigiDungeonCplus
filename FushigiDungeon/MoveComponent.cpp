@@ -15,7 +15,7 @@ MoveComponent::MoveComponent(GameObject* gameObject, bool isPlayer):
 	mIsMoving(false),
 	mIsPlayer(isPlayer),
 	mPixelsCount(0),
-	mSpeed(200)
+	mSpeed(150)
 {
 	mNumber = 2;
 }
@@ -34,11 +34,15 @@ void MoveComponent::SetDir(Vector2 dir)
 		return;
 	Vector2 curPos = mGameObject->GetPosition();
 	mDir = dir;
-	mDst = curPos + mDir * 32;
-	if (WallCheck() && ColliderCheck())
+	Vector2 tempDst = curPos + mDir * 32;
+	if (WallCheck(mDir) && ColliderCheck(mDir))
 	{
+		mDst = tempDst;
 		mIsMoving = true;
 		mGameObject->SetInputEnabled(false);
+
+		mGameObject->GetGame()->GetDungeon()
+			->GetComponent<BattleManager>()->NewTurn();
 	}
 }
 
@@ -58,9 +62,9 @@ void MoveComponent::MoveOneGrid()
 	}
 }
 
-bool MoveComponent::WallCheck()
+bool MoveComponent::WallCheck(Vector2 dir)
 {
-	Vector2 tempDst = mGameObject->GetPosition() + mDir * 32;
+	Vector2 tempDst = mGameObject->GetPosition() + dir * 32;
 	int gridX = static_cast<int>(tempDst.x / 32);
 	int gridY = static_cast<int>(tempDst.y / 32);
 	int index = gridY * (mMap->width) + gridX;
@@ -72,12 +76,13 @@ bool MoveComponent::WallCheck()
 		return false;
 }
 
-bool MoveComponent::ColliderCheck()
+bool MoveComponent::ColliderCheck(Vector2 dir)
 {
+	Vector2 tempDst = mGameObject->GetPosition() + dir * 32;
 	mEnemies = mGameObject->GetGame()->GetEnemies();
 	for (auto enemy : mEnemies)
 	{
-		if (mDst == enemy->GetPosition())
+		if (tempDst == enemy->GetPosition())
 			return false;
 	}
 	return true;
@@ -98,7 +103,5 @@ void MoveComponent::ReachOneGrid()
 		}
 	}
 
-	mGameObject->GetGame()->GetDungeon()
-		->GetComponent<BattleManager>()->NewTurn();
 	//mGameObject->SetInputEnabled(true);
 }

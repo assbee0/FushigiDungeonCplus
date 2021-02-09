@@ -13,6 +13,7 @@
 #include "MapMaker.h"
 #include "Ladder.h"
 #include "Timer.h"
+#include "BattleComponent.h"
 
 Game::Game():
 	mWindow(nullptr),
@@ -166,6 +167,10 @@ SDL_Texture* Game::GetTexture(const std::string& filename)
 
 void Game::NewFloor()
 {
+	while (!mEnemies.empty())
+	{
+		delete mEnemies.back();
+	}
 	mDungeon->NewFloor();
 	Map* map = mDungeon->GetMap();
 
@@ -177,6 +182,16 @@ void Game::NewFloor()
 	mCamera->SetPlayer(mPlayer);
 	mCamera->SetMapW(map->width * 32);
 	mCamera->SetMapH(map->height * 32);
+
+	int curFloor = mDungeon->GetFloor();
+	for (int i = 0; i < curFloor; i++)
+	{
+		Enemy* e1 = new Enemy(this);
+		e1->SetPosition(map->GetRandomPos());
+		e1->GetComponent<NavComponent>()->SetMap(map);
+	}
+	
+
 }
 
 void Game::Event()
@@ -198,6 +213,7 @@ void Game::Event()
 	}
 	
 	mPlayer->ProcessInput(state);
+
 }
 
 void Game::Update()
@@ -270,7 +286,7 @@ void Game::LoadData()
 	LoadTexture("Sprites/Ground.png","Ground");
 	LoadTexture("Sprites/Wall.png","Wall");
 	LoadTexture("Sprites/chrA07.png","Player");
-	LoadTexture("Sprites/monster001.png","Enemy1");
+	LoadTexture("Sprites/SquareManWhite.png","Enemy1");
 	LoadTexture("Sprites/ladder.png","Ladder");
 
 	mDungeon = new Dungeon(this);
@@ -295,6 +311,7 @@ void Game::LoadData()
 	mCamera->SetMapH(map->height * 32);
 
 	printf("Floor 1\n");
+	printf("HP:50 / 50\n");
 }
 
 void Game::UnloadData()
