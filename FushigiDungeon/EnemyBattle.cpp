@@ -6,7 +6,7 @@
 EnemyBattle::EnemyBattle(GameObject* gameObject):
 	BattleComponent(gameObject, false)
 {
-	mHp = 5;
+	mStatus.Init(1, 3, 3, 2, 0, 2);
 }
 
 void EnemyBattle::Update()
@@ -21,12 +21,9 @@ void EnemyBattle::Update()
 	}
 }
 
-bool EnemyBattle::IsDead()
+void EnemyBattle::BeAttacked(int damage)
 {
-	if (mHp <= 0)
-		return true;
-	else
-		return false;
+	mStatus.curHp -= damage;
 }
 
 void EnemyBattle::AttackOver()

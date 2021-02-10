@@ -6,7 +6,6 @@ public:
 	float y;
 
 	Vector2();
-	Vector2(int X, int Y);
 	Vector2(float X, float Y);
 
 	static Vector2 Sum(Vector2 a, Vector2 b);
@@ -44,8 +43,21 @@ public:
 	}
 };
 
+class Vector3
+{
+public:
+	float x;
+	float y;
+	float z;
+
+	Vector3();
+	Vector3(float X, float Y, float Z);
+};
+
 class Mathf
 {
 public:
 	static float Abs(float a);
+	static float Max(float a, float b);
+	static int Max(int a, int b);
 };

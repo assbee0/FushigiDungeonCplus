@@ -21,13 +21,26 @@ public:
 	void CreateEnemy(class Enemy* enemy);
 	void RemoveEnemy(class Enemy* enemy);
 	SDL_Texture* GetTexture(const std::string &filename);
+	void PushUI(class UIScreen* ui);
 	void NewFloor();
 
-	std::vector<class Enemy*> GetEnemies() const { return mEnemies; }
+	enum class GameState
+	{
+		GPlay,
+		GPaused,
+		GQuit
+	};
+
+	GameState GetGameState() const { return mGameState; }
+	void SetGameState(GameState state) { mGameState = state; }
+	const std::vector<class UIScreen*>& GetUIStack() { return mUIStack; }
+	const std::vector<class Enemy*>& GetEnemies() { return mEnemies; }
+	SDL_Renderer* GetRenderer() { return mRenderer; }
 	class Dungeon* GetDungeon() const { return mDungeon; }
 	class Player* GetPlayer() const { return mPlayer; }
 	class Ladder* GetLadder() const { return mLadder; }
-	void SetIsRunning(bool flag) { mIsRunning = flag; }
+	class Font* GetFont() const { return mFont; }
+	class HUD* GetHUD() const { return mHUD; }
 
 private:
 	void Event();
@@ -38,8 +51,10 @@ private:
 	void UnloadData();
 	void LoadTexture(const std::string& filename);
 	void LoadTexture(const std::string& filename, const std::string& newname);
+	void LoadFont(const std::string& filename, const std::string& newname);
 
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
+	std::vector<class UIScreen*> mUIStack;
 
 	std::vector<class GameObject*> mGameObjects;
 	std::vector<class GameObject*> mPendingObjects;
@@ -48,12 +63,13 @@ private:
 
 	SDL_Window* mWindow;
 	SDL_Renderer* mRenderer;
-	SDL_GLContext mContext;
-	bool mIsRunning;
+	GameState mGameState;
 	bool mIsUpdatingObjects;
 
 	class Player* mPlayer;
 	class Dungeon* mDungeon;
 	class CameraLock* mCamera;
 	class Ladder* mLadder;
+	class Font* mFont;
+	class HUD* mHUD;
 };

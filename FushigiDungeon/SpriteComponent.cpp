@@ -34,6 +34,5 @@ void SpriteComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
 void SpriteComponent::SetTexture(SDL_Texture* texture)
 {
 	mTexture = texture;
-	//获取贴图的宽和高
 	SDL_QueryTexture(texture, nullptr, nullptr, &mTexWidth, &mTexHeight);
 }

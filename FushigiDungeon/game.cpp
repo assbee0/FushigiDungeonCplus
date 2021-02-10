@@ -1,30 +1,30 @@
 #include "Game.h"
 #include "SDL_image.h"
-#include "SpriteComponent.h"
-#include "MoveComponent.h"
 #include "NavComponent.h"
 #include "Player.h"
 #include "Enemy.h"
 #include "Dungeon.h"
 #include "Camera.h"
 #include "CameraLock.h"
-#include "GL/glew.h"
 #include "MapComponent.h"
 #include "MapMaker.h"
 #include "Ladder.h"
 #include "Timer.h"
 #include "BattleComponent.h"
+#include "HUD.h"
+#include "Font.h"
 
 Game::Game():
 	mWindow(nullptr),
 	mRenderer(nullptr),
-	mContext(0),
-	mIsRunning(true),
+	mGameState(GameState::GPlay),
 	mIsUpdatingObjects(false),
 	mPlayer(nullptr),
 	mDungeon(nullptr),
 	mCamera(nullptr),
-	mLadder(nullptr)
+	mLadder(nullptr),
+	mFont(nullptr),
+	mHUD(nullptr)
 {
 
 }
@@ -56,6 +56,12 @@ bool Game::Initialize()
 		return false;
 	}
 
+	if (TTF_Init())
+	{
+		SDL_Log("Failed to initialize SDL_ttf");
+		return false;
+	}
+
 	Timer::deltaTime = 0;
 	Timer::ticksCount = 0;
 
@@ -67,7 +73,7 @@ bool Game::Initialize()
 void Game::Loop()
 //主循环
 {
-	while (mIsRunning)
+	while (mGameState != GameState::GQuit)
 	{
 		//处理包括输入的各种事件
 		Event();
@@ -82,10 +88,10 @@ void Game::Shutdown()
 //结束并关闭游戏
 {
 	SDL_DestroyRenderer(mRenderer);
-	SDL_GL_DeleteContext(mContext);
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
 	IMG_Quit();
+	TTF_Quit();
 	UnloadData();
 }
 
@@ -165,6 +171,11 @@ SDL_Texture* Game::GetTexture(const std::string& filename)
 	return tex;
 }
 
+void Game::PushUI(UIScreen* ui)
+{
+	mUIStack.emplace_back(ui);
+}
+
 void Game::NewFloor()
 {
 	while (!mEnemies.empty())
@@ -184,6 +195,7 @@ void Game::NewFloor()
 	mCamera->SetMapH(map->height * 32);
 
 	int curFloor = mDungeon->GetFloor();
+	mHUD->SetFloor(curFloor);
 	for (int i = 0; i < curFloor; i++)
 	{
 		Enemy* e1 = new Enemy(this);
@@ -202,17 +214,24 @@ void Game::Event()
 	{
 		if (event.type == SDL_QUIT)
 		{
-			mIsRunning = false;
+			mGameState = GameState::GQuit;
 			break;
 		}
 	}
 	const Uint8* state = SDL_GetKeyboardState(NULL);
 	if (state[SDL_SCANCODE_ESCAPE])
 	{
-		mIsRunning = false;
+		mGameState = GameState::GQuit;
 	}
 	
-	mPlayer->ProcessInput(state);
+	if (mGameState == GameState::GPlay)
+	{
+		mPlayer->ProcessInput(state);
+	}
+	else if(!mUIStack.empty())
+	{
+		mUIStack.back()->ProcessInput(state);
+	}
 
 }
 
@@ -250,6 +269,24 @@ void Game::Update()
 	{
 		delete deadObject;
 	}
+
+	for (auto ui : mUIStack)
+	{
+		if (ui->GetState() == UIScreen::UIState::UActive)
+		{
+			ui->Update();
+		}
+	}
+
+	for (auto iter = mUIStack.begin(); iter != mUIStack.end(); iter++)
+	{
+		if ((*iter)->GetState() == UIScreen::UIState::UDead)
+		{
+			delete* iter;
+			iter = mUIStack.erase(iter);
+			iter--;
+		}
+	}
 }
 
 void Game::Draw()
@@ -262,6 +299,11 @@ void Game::Draw()
 	for (auto sprite : mSprites)
 	{
 		sprite->Draw(mRenderer, mCamera);
+	}
+
+	for (auto ui : mUIStack)
+	{
+		ui->Draw(mRenderer);
 	}
 
 	// Swap the buffer
@@ -288,6 +330,8 @@ void Game::LoadData()
 	LoadTexture("Sprites/chrA07.png","Player");
 	LoadTexture("Sprites/SquareManWhite.png","Enemy1");
 	LoadTexture("Sprites/ladder.png","Ladder");
+	LoadTexture("Sprites/HUDbar.png","HUDbar");
+	LoadFont("Font/Carlito-Regular.ttf", "Carlito");
 
 	mDungeon = new Dungeon(this);
 	mPlayer = new Player(this);
@@ -310,8 +354,9 @@ void Game::LoadData()
 	mCamera->SetMapW(map->width * 32);
 	mCamera->SetMapH(map->height * 32);
 
+	mHUD = new HUD(this);
+
 	printf("Floor 1\n");
-	printf("HP:50 / 50\n");
 }
 
 void Game::UnloadData()
@@ -320,11 +365,20 @@ void Game::UnloadData()
 	{
 		delete mGameObjects.back();
 	}
+
+	while (!mUIStack.empty())
+	{
+		delete mUIStack.back();
+		mUIStack.pop_back();
+	}
+
 	for (auto tex : mTextures)
 	{
 		SDL_DestroyTexture(tex.second);
 	}
 	mTextures.clear();
+
+	delete mFont;
 }
 
 void Game::LoadTexture(const std::string &filename)
@@ -353,6 +407,7 @@ void Game::LoadTexture(const std::string &filename)
 	}
 }
 
+
 void Game::LoadTexture(const std::string& filename, const std::string& newname)
 {
 	auto iter = mTextures.find(filename);
@@ -376,5 +431,14 @@ void Game::LoadTexture(const std::string& filename, const std::string& newname)
 		}
 
 		mTextures.emplace(newname.c_str(), tex);
+	}
+}
+
+void Game::LoadFont(const std::string& filename, const std::string& newname)
+{
+	Font* font = new Font(this);
+	if (font->LoadFont(filename))
+	{
+		mFont = font;
 	}
 }

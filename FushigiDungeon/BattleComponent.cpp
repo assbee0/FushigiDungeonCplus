@@ -4,6 +4,7 @@
 #include "Enemy.h"
 #include "BattleManager.h"
 #include "Timer.h"
+#include "HUD.h"
 
 BattleComponent::BattleComponent(GameObject* gameObject, bool isPlayer):
 	Component(gameObject),
@@ -13,10 +14,9 @@ BattleComponent::BattleComponent(GameObject* gameObject, bool isPlayer):
 	mStartPos(Vector2::Zero),
 	mIsBattling(false),
 	mAnimeCount(0),
-	mHp(50),
-	mAttack(2)
+	mStatus(Status())
 {
-	mNumber = 3;
+
 }
 
 void BattleComponent::Update()
@@ -25,6 +25,14 @@ void BattleComponent::Update()
 	{
 		AttackAnimation();
 	}
+}
+
+bool BattleComponent::IsDead()
+{
+	if (mStatus.curHp <= 0)
+		return true;
+	else
+		return false;
 }
 
 void BattleComponent::SetBattling()
@@ -50,24 +58,28 @@ BattleComponent* BattleComponent::CheckTarget()
 
 void BattleComponent::AttackTarget()
 {
-	int damage = mAttack;
+	int damage = mStatus.atk;
 	mTarget->BeAttacked(damage);
+	if (mTarget->IsDead())
+	{
+		mStatus.exp += mTarget->GetExp();
+		UpdateHUD();
+	}
 }
 
 void BattleComponent::BeAttacked(int damage)
 {
-	mHp -= damage;
-	if (mIsPlayer)
+	int realDamage = Mathf::Max(damage - mStatus.def, 0);
+	mStatus.curHp -= realDamage;
+	UpdateHUD();
+
+	printf("HP:%d / %d\n", mStatus.curHp, mStatus.maxHp);
+	if (mStatus.curHp <= 0)
 	{
-		printf("HP:%d / 50\n", mHp);
-		if (mHp <= 0)
-		{
-			printf("你拉稀了\n");
-			mGameObject->GetGame()->SetIsRunning(false);
-		}
+		printf("你拉稀了\n");
+		mGameObject->GetGame()->SetGameState(Game::GameState::GQuit);
 	}
 }
-
 
 void BattleComponent::AttackAnimation()
 {
@@ -107,4 +119,38 @@ void BattleComponent::AttackOver()
 	mGameObject->GetGame()->GetDungeon()
 		->GetComponent<BattleManager>()->NewTurn();
 
+}
+
+void BattleComponent::UpdateHUD()
+{
+	mGameObject->GetGame()->GetHUD()->SetStatus
+	(
+		mStatus.level,
+		mStatus.curHp,
+		mStatus.maxHp,
+		mStatus.atk,
+		mStatus.def,
+		mStatus.exp
+	);
+}
+
+Status::Status():
+	level(1),
+	curHp(10),
+	maxHp(10),
+	atk(2),
+	def(1),
+	exp(0)
+{
+	
+}
+
+void Status::Init(int lv, int cHp, int mHp, int a, int d, int e)
+{
+	level = lv;
+	curHp = cHp;
+	maxHp = mHp;
+	atk = a;
+	def = d;
+	exp = e;
 }

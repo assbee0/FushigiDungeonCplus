@@ -49,3 +49,4 @@ void Player::Update()
 	//printf("%f,%f\n", GetPosition().x, GetPosition().y);
 	//printf("%d", mInputEnabled);
 }
+
