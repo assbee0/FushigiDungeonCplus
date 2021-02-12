@@ -23,6 +23,7 @@ public:
 	SDL_Texture* GetTexture(const std::string &filename);
 	void PushUI(class UIScreen* ui);
 	void NewFloor();
+	void Restart();
 
 	enum class GameState
 	{
@@ -44,6 +45,7 @@ public:
 
 private:
 	void Event();
+	void InputKeyPressed(int key);
 	void Update();
 	void Draw();
 	void Tick(int FPS);

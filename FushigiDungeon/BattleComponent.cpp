@@ -5,6 +5,7 @@
 #include "BattleManager.h"
 #include "Timer.h"
 #include "HUD.h"
+#include "GameOverUI.h"
 
 BattleComponent::BattleComponent(GameObject* gameObject, bool isPlayer):
 	Component(gameObject),
@@ -77,7 +78,8 @@ void BattleComponent::BeAttacked(int damage)
 	if (mStatus.curHp <= 0)
 	{
 		printf("ÄãÀ­Ï¡ÁË\n");
-		mGameObject->GetGame()->SetGameState(Game::GameState::GQuit);
+		new GameOverUI(mGameObject->GetGame(), mStatus.level, mGameObject->GetGame()->GetDungeon()->GetFloor());
+		//mGameObject->GetGame()->SetGameState(Game::GameState::GQuit);
 	}
 }
 

@@ -13,6 +13,7 @@
 #include "BattleComponent.h"
 #include "HUD.h"
 #include "Font.h"
+#include "Menu.h"
 
 Game::Game():
 	mWindow(nullptr),
@@ -90,9 +91,9 @@ void Game::Shutdown()
 	SDL_DestroyRenderer(mRenderer);
 	SDL_DestroyWindow(mWindow);
 	SDL_Quit();
+	UnloadData();
 	IMG_Quit();
 	TTF_Quit();
-	UnloadData();
 }
 
 void Game::CreateGameObject(GameObject* gameObject)
@@ -206,23 +207,64 @@ void Game::NewFloor()
 
 }
 
+void Game::Restart()
+{
+	UnloadData();
+	LoadData();
+	mGameState = GameState::GPlay;
+}
+
 void Game::Event()
 //处理包括输入的各种事件
 {
 	SDL_Event event;
+	bool mouseEnabled = false;
 	while (SDL_PollEvent(&event))
 	{
-		if (event.type == SDL_QUIT)
+		switch (event.type)
 		{
+		case SDL_QUIT:
 			mGameState = GameState::GQuit;
+			break;
+		case SDL_KEYDOWN:
+			if (mGameState == GameState::GPlay)
+			{
+				InputKeyPressed(event.key.keysym.sym);
+				mPlayer->InputKeyPressed(event.key.keysym.sym); 
+			}
+			else if (mGameState == GameState::GPaused && !event.key.repeat)
+			{
+				if (!mUIStack.empty())
+				{
+					mouseEnabled = false;
+					mUIStack.back()->InputKeyPressed(event.key.keysym.sym);
+				}
+			}
+			break;
+		case SDL_MOUSEBUTTONDOWN:
+			if (mGameState == GameState::GPaused)
+			{
+				if (!mUIStack.empty())
+				{
+					mUIStack.back()->InputKeyPressed(event.button.button);
+				}
+			}
+			break;
+		case SDL_MOUSEMOTION:
+			if (mGameState == GameState::GPaused)
+			{
+				if (!mUIStack.empty())
+				{
+					mouseEnabled = true;
+					mUIStack.back()->ResetButtonPointer();
+				}
+			}
+			break;
+		default:
 			break;
 		}
 	}
 	const Uint8* state = SDL_GetKeyboardState(NULL);
-	if (state[SDL_SCANCODE_ESCAPE])
-	{
-		mGameState = GameState::GQuit;
-	}
 	
 	if (mGameState == GameState::GPlay)
 	{
@@ -230,9 +272,24 @@ void Game::Event()
 	}
 	else if(!mUIStack.empty())
 	{
-		mUIStack.back()->ProcessInput(state);
+		if (mouseEnabled)
+		{
+			mUIStack.back()->ProcessInput(state);
+		}
 	}
 
+}
+
+void Game::InputKeyPressed(int key)
+{
+	switch (key)
+	{
+	case SDLK_ESCAPE:
+		new Menu(this);
+		break;
+	default:
+		break;
+	}
 }
 
 void Game::Update()
@@ -282,7 +339,7 @@ void Game::Update()
 	{
 		if ((*iter)->GetState() == UIScreen::UIState::UDead)
 		{
-			delete* iter;
+			delete *iter;
 			iter = mUIStack.erase(iter);
 			iter--;
 		}
@@ -331,6 +388,10 @@ void Game::LoadData()
 	LoadTexture("Sprites/SquareManWhite.png","Enemy1");
 	LoadTexture("Sprites/ladder.png","Ladder");
 	LoadTexture("Sprites/HUDbar.png","HUDbar");
+	LoadTexture("Sprites/menuBackground.png", "MenuBack");
+	LoadTexture("Sprites/ButtonOff.png", "ButtonOff");
+	LoadTexture("Sprites/ButtonOn.png", "ButtonOn");
+	LoadTexture("Sprites/GameOver.png", "GameOver");
 	LoadFont("Font/Carlito-Regular.ttf", "Carlito");
 
 	mDungeon = new Dungeon(this);

@@ -96,6 +96,12 @@
     <ClCompile Include="Font.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="GameOverUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Component.h">
@@ -168,6 +174,12 @@
       <Filter>ソース ファイル</Filter>
     </ClInclude>
     <ClInclude Include="Font.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>ソース ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="GameOverUI.h">
       <Filter>ソース ファイル</Filter>
     </ClInclude>
   </ItemGroup>

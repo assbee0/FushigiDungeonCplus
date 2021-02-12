@@ -9,12 +9,15 @@ Font::Font(Game* game):
 
 Font::~Font()
 {
-
+	for (auto& font : mFontData)
+	{
+		TTF_CloseFont(font.second);
+	}
 }
 
 bool Font::LoadFont(const std::string& fileName)
 {
-	std::vector<int> fontSizes = { 8, 9, 10, 11, 12, 14, 16, 18 };
+	std::vector<int> fontSizes = { 8, 9, 10, 11, 12, 14, 16, 18, 24, 28};
 	for (auto& size : fontSizes)
 	{
 		TTF_Font* font = TTF_OpenFont(fileName.c_str(), size);

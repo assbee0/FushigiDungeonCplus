@@ -37,7 +37,11 @@ void Player::ProcessInput(const Uint8* state)
 		mc->SetDir(Vector2::X);
 		bc->SetFacing(Vector2::X);
 	}
-	else if (state[SDL_SCANCODE_SPACE])
+}
+
+void Player::InputKeyPressed(int key)
+{
+	if (key == SDLK_SPACE && mInputEnabled)
 	{
 		bc->SetBattling();
 		mInputEnabled = false;

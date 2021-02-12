@@ -153,6 +153,7 @@
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBattle.cpp" />
     <ClCompile Include="GameObject.cpp" />
+    <ClCompile Include="GameOverUI.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -160,6 +161,7 @@
     <ClCompile Include="MapComponent.cpp" />
     <ClCompile Include="MapMaker.cpp" />
     <ClCompile Include="Math.cpp" />
+    <ClCompile Include="Menu.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="NavComponent.cpp" />
     <ClCompile Include="Player.cpp" />
@@ -182,11 +184,13 @@
     <ClInclude Include="EnemyBattle.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
+    <ClInclude Include="GameOverUI.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="MapComponent.h" />
     <ClInclude Include="MapMaker.h" />
     <ClInclude Include="Math.h" />
+    <ClInclude Include="Menu.h" />
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="NavComponent.h" />
     <ClInclude Include="Player.h" />
