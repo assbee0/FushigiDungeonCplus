@@ -19,8 +19,9 @@ public:
 class BattleComponent : public Component
 {
 public:
-	BattleComponent(class GameObject* gameObject, bool isPlayer);
+	BattleComponent(class GameObject* gameObject);
 	void Update() override;
+	virtual void BeAttacked(int damage);
 
 	bool IsDead();
 	void SetFacing(Vector2 f) { mFacing = f; }
@@ -30,12 +31,10 @@ public:
 
 protected:
 	virtual class BattleComponent* CheckTarget();
-	void AttackTarget();
-	virtual void BeAttacked(int damage);
+	virtual void AttackTarget();
 	void AttackAnimation();
 	virtual void AttackOver();
 
-	bool mIsPlayer;
 	class BattleComponent* mTarget;
 	Vector2 mFacing;
 	Vector2 mStartPos;
@@ -43,7 +42,4 @@ protected:
 	float mAnimeCount;
 	
 	class Status mStatus;
-
-private:
-	void UpdateHUD();
 };

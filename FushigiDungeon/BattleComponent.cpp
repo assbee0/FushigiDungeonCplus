@@ -1,17 +1,13 @@
 #include "BattleComponent.h"
 #include "GameObject.h"
-#include "Dungeon.h"
 #include "Enemy.h"
-#include "BattleManager.h"
 #include "Timer.h"
-#include "HUD.h"
-#include "GameOverUI.h"
+#include "Random.h"
 
-BattleComponent::BattleComponent(GameObject* gameObject, bool isPlayer):
+BattleComponent::BattleComponent(GameObject* gameObject):
 	Component(gameObject),
-	mIsPlayer(isPlayer),
 	mTarget(nullptr),
-	mFacing(Vector2::Zero),
+	mFacing(Vector2::Y),
 	mStartPos(Vector2::Zero),
 	mIsBattling(false),
 	mAnimeCount(0),
@@ -61,26 +57,16 @@ void BattleComponent::AttackTarget()
 {
 	int damage = mStatus.atk;
 	mTarget->BeAttacked(damage);
-	if (mTarget->IsDead())
-	{
-		mStatus.exp += mTarget->GetExp();
-		UpdateHUD();
-	}
 }
 
 void BattleComponent::BeAttacked(int damage)
 {
 	int realDamage = Mathf::Max(damage - mStatus.def, 0);
-	mStatus.curHp -= realDamage;
-	UpdateHUD();
-
-	printf("HP:%d / %d\n", mStatus.curHp, mStatus.maxHp);
-	if (mStatus.curHp <= 0)
+	if (realDamage == 0)
 	{
-		printf("ÄãÀ­Ï¡ÁË\n");
-		new GameOverUI(mGameObject->GetGame(), mStatus.level, mGameObject->GetGame()->GetDungeon()->GetFloor());
-		//mGameObject->GetGame()->SetGameState(Game::GameState::GQuit);
+		realDamage = Random::GetIntRange(0, 1);
 	}
+	mStatus.curHp -= realDamage;
 }
 
 void BattleComponent::AttackAnimation()
@@ -117,23 +103,6 @@ void BattleComponent::AttackOver()
 		AttackTarget();
 		mTarget = nullptr;
 	}
-
-	mGameObject->GetGame()->GetDungeon()
-		->GetComponent<BattleManager>()->NewTurn();
-
-}
-
-void BattleComponent::UpdateHUD()
-{
-	mGameObject->GetGame()->GetHUD()->SetStatus
-	(
-		mStatus.level,
-		mStatus.curHp,
-		mStatus.maxHp,
-		mStatus.atk,
-		mStatus.def,
-		mStatus.exp
-	);
 }
 
 Status::Status():
@@ -142,7 +111,7 @@ Status::Status():
 	maxHp(10),
 	atk(2),
 	def(1),
-	exp(0)
+	exp(5)
 {
 	
 }

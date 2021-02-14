@@ -25,8 +25,8 @@ void Dungeon::NewFloor()
 {
 	delete mMap->mapArray;
 	delete mMap;
-	mWidth = 20 + mFloor * 3;
-	mHeight = 15 + mFloor * 3;
+	mWidth = Mathf::Min(20 + mFloor * 2, 60);
+	mHeight = Mathf::Min(15 + mFloor * 2, 55);
 	GetComponent<MapMaker>()->SetParameters(mWidth, mHeight, 10, 10);
 	mMap = GetComponent<MapMaker>()->BuildMap();
 	GetComponent<MapComponent>()->SetMap(mMap);

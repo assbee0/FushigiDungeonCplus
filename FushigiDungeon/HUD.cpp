@@ -11,7 +11,7 @@ HUD::HUD(Game* game) :
 	mMaxHp(10),
 	mAtk(2),
 	mDef(1),
-	mExp(0)
+	mExp(5)
 {
 	mTexBackground = game->GetTexture("HUDbar");
 	SDL_SetTextureAlphaMod(mTexBackground, 128);
@@ -26,9 +26,9 @@ void HUD::UpdateValues()
 	ss << "Level: " << std::setw(3) << std::setfill('0') << mLevel << "     ";
 	ss << "HP: " << std::setw(3) << std::setfill('0') << mCurHp << 
 		   " / " << std::setw(3) << std::setfill('0') << mMaxHp << "     ";
-	ss << "STR: " << std::setw(3) << std::setfill('0') << mAtk << "     ";
+	ss << "ATK: " << std::setw(3) << std::setfill('0') << mAtk << "     ";
 	ss << "DEF: " << std::setw(3) << std::setfill('0') << mDef << "     ";
-	ss << "EXP: " << std::setw(5) << std::setfill('0') << mExp;
+	ss << "NEXT EXP: " << std::setw(5) << std::setfill('0') << mExp;
 	std::string str = ss.str();
 	SetText(str, Vector3(0.286f, 0.141f, 0.055f), 18, mGame->GetRenderer());
 }

@@ -14,6 +14,8 @@
 #include "HUD.h"
 #include "Font.h"
 #include "Menu.h"
+#include "Random.h"
+#include "HealthItem.h"
 
 Game::Game():
 	mWindow(nullptr),
@@ -24,6 +26,7 @@ Game::Game():
 	mDungeon(nullptr),
 	mCamera(nullptr),
 	mLadder(nullptr),
+	mHealthItem(nullptr),
 	mFont(nullptr),
 	mHUD(nullptr)
 {
@@ -183,12 +186,19 @@ void Game::NewFloor()
 	{
 		delete mEnemies.back();
 	}
+	mEnemies.clear();
+	if (mHealthItem)
+	{
+		delete mHealthItem;
+	}
+	
 	mDungeon->NewFloor();
 	Map* map = mDungeon->GetMap();
 
 	mLadder->SetPosition(map->GetRandomPos());
 
 	mPlayer->SetPosition(map->GetRandomPos());
+	mPlayer->GetComponent<MoveComponent>()->SetDst(mPlayer->GetPosition());
 	mPlayer->GetComponent<MoveComponent>()->SetMap(map);
 
 	mCamera->SetPlayer(mPlayer);
@@ -199,12 +209,21 @@ void Game::NewFloor()
 	mHUD->SetFloor(curFloor);
 	for (int i = 0; i < curFloor; i++)
 	{
-		Enemy* e1 = new Enemy(this);
+		int enemyNumber;
+		enemyNumber = Random::GetIntRange(Mathf::Max(curFloor / 3 - 1, 1), curFloor / 3 + 1);
+		if (enemyNumber > 6)
+			enemyNumber = 6;
+		Enemy* e1 = new Enemy(this, enemyNumber);
 		e1->SetPosition(map->GetRandomPos());
 		e1->GetComponent<NavComponent>()->SetMap(map);
 	}
 	
-
+	int random = Random::GetIntRange(1, 5);
+	if(random == 5)
+		mHealthItem = new HealthItem(this, 2);
+	else
+		mHealthItem = new HealthItem(this, 1);
+	mHealthItem->SetPosition(map->GetRandomPos());
 }
 
 void Game::Restart()
@@ -382,21 +401,31 @@ void Game::Tick(int FPS)
 
 void Game::LoadData()
 {
-	LoadTexture("Sprites/Ground.png","Ground");
-	LoadTexture("Sprites/Wall.png","Wall");
-	LoadTexture("Sprites/chrA07.png","Player");
-	LoadTexture("Sprites/SquareManWhite.png","Enemy1");
-	LoadTexture("Sprites/ladder.png","Ladder");
-	LoadTexture("Sprites/HUDbar.png","HUDbar");
-	LoadTexture("Sprites/menuBackground.png", "MenuBack");
-	LoadTexture("Sprites/ButtonOff.png", "ButtonOff");
-	LoadTexture("Sprites/ButtonOn.png", "ButtonOn");
-	LoadTexture("Sprites/GameOver.png", "GameOver");
+	LoadTexture("Sprites/Ground.spr","Ground");
+	LoadTexture("Sprites/Wall.spr","Wall");
+	LoadTexture("Sprites/chrA07.spr","Player");
+	LoadTexture("Sprites/SquareManWhite.spr","SquareManWhite");
+	LoadTexture("Sprites/SquareManGreen.spr","SquareManGreen");
+	LoadTexture("Sprites/SquareManYellow.spr","SquareManYellow");
+	LoadTexture("Sprites/SquareManBlue.spr","SquareManBlue");
+	LoadTexture("Sprites/SquareManRed.spr","SquareManRed");
+	LoadTexture("Sprites/SquareManBlack.spr","SquareManBlack");
+	LoadTexture("Sprites/ladder.spr","Ladder");
+	LoadTexture("Sprites/Yakusou.spr","Yakusou");
+	LoadTexture("Sprites/HpBox.spr","HpBox");
+	LoadTexture("Sprites/HUDbar.spr","HUDbar");
+	LoadTexture("Sprites/menuBackground.spr", "MenuBack");
+	LoadTexture("Sprites/MessageBox.spr", "MessageBack");
+	LoadTexture("Sprites/ButtonOff.spr", "ButtonOff");
+	LoadTexture("Sprites/ButtonOffS.spr", "ButtonOffS");
+	LoadTexture("Sprites/ButtonOn.spr", "ButtonOn");
+	LoadTexture("Sprites/ButtonOnS.spr", "ButtonOnS");
+	LoadTexture("Sprites/GameOver.spr", "GameOver");
 	LoadFont("Font/Carlito-Regular.ttf", "Carlito");
 
 	mDungeon = new Dungeon(this);
 	mPlayer = new Player(this);
-	Enemy* e1 = new Enemy(this);
+	Enemy* e1 = new Enemy(this, 1);
 	Camera* cam = new Camera(this);
 	mCamera = cam->GetComponent<CameraLock>();
 	mLadder = new Ladder(this);

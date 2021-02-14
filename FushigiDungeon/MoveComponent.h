@@ -14,6 +14,7 @@ public:
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetDir(Vector2 dir);
 	Vector2 GetDst()const { return mDst; }
+	void SetDst(Vector2 dst) { mDst = dst; }
 
 protected:
 

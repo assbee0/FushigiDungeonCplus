@@ -39,7 +39,9 @@ void MapComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
 			Vector2 camPos = cam->WorldToCamera(worldPos);
 			dstrect.x = static_cast<int>(camPos.x);
 			dstrect.y = static_cast<int>(camPos.y);
-			if (mMapArray[i * mWidth + j] == 2)
+			if (i * mWidth + j >= mWidth * mHeight)
+				continue;
+ 			if (mMapArray[i * mWidth + j] == 2)
 				SDL_RenderCopy(renderer, mTextures[0], nullptr, &dstrect);
 			else
 				SDL_RenderCopy(renderer, mTextures[1], nullptr, &dstrect);

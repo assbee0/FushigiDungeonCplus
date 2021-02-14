@@ -5,18 +5,25 @@
 #include "AIComponent.h"
 #include "AIState.h"
 #include "Player.h"
-#include "EnemyBattle.h"
+#include <fstream>
+#include <sstream>
+#include "json.hpp"
 
-Enemy::Enemy(Game* game):
-	GameObject(game)
+using json = nlohmann::json; 
+
+Enemy::Enemy(Game* game, int number):
+	GameObject(game),
+	mNumber(number)
 {
+	LoadData("Data/EnemyData.enmy", number);
+
 	SpriteComponent* es = new SpriteComponent(this, 99);
-	es->SetTexture(game->GetTexture("Enemy1"));
+	es->SetTexture(game->GetTexture(mName));
 
 	NavComponent* nav = new NavComponent(this);
 	nav->SetPlayer(game->GetPlayer());
 
-	EnemyBattle* eb = new EnemyBattle(this);
+	EnemyBattle* eb = new EnemyBattle(this, mStatus);
 
 	AIComponent* ai = new AIComponent(this); 
 	ai->RegisterState(new AIIdle(ai));
@@ -37,4 +44,27 @@ Enemy::~Enemy()
 	{
 		delete mComponents.back();
 	}
+}
+
+bool Enemy::LoadData(const std::string& fileName, int number)
+{
+	std::ifstream file(fileName);
+	if (!file.is_open())
+	{
+		SDL_Log("File not found: Enemy %s", fileName.c_str());
+		return false;
+	}
+
+	json j;
+	file >> j;
+
+	mName = j[mNumber]["name"];
+	mStatus.level = j[mNumber]["level"];
+	mStatus.maxHp = j[mNumber]["maxhp"];
+	mStatus.curHp = mStatus.maxHp;
+	mStatus.atk = j[mNumber]["atk"];
+	mStatus.def = j[mNumber]["def"];
+	mStatus.exp = j[mNumber]["exp"];
+
+	return true;
 }

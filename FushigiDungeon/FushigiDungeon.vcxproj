@@ -88,7 +88,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>E:\C++\SDL2-2.0.14\include;E:\C++\GLEW\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>E:\C++\SDL2-2.0.14\include;E:\C++\GLEW\include;E:\C++\nlohmann;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -154,6 +154,7 @@
     <ClCompile Include="EnemyBattle.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameOverUI.cpp" />
+    <ClCompile Include="HealthItem.cpp" />
     <ClCompile Include="HUD.cpp" />
     <ClCompile Include="Ladder.cpp" />
     <ClCompile Include="Main.cpp" />
@@ -162,9 +163,11 @@
     <ClCompile Include="MapMaker.cpp" />
     <ClCompile Include="Math.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MessageBox.cpp" />
     <ClCompile Include="MoveComponent.cpp" />
     <ClCompile Include="NavComponent.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="PlayerBattle.cpp" />
     <ClCompile Include="Random.cpp" />
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Font.cpp" />
@@ -185,15 +188,18 @@
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOverUI.h" />
+    <ClInclude Include="HealthItem.h" />
     <ClInclude Include="HUD.h" />
     <ClInclude Include="Ladder.h" />
     <ClInclude Include="MapComponent.h" />
     <ClInclude Include="MapMaker.h" />
     <ClInclude Include="Math.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="MessageBox.h" />
     <ClInclude Include="MoveComponent.h" />
     <ClInclude Include="NavComponent.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="PlayerBattle.h" />
     <ClInclude Include="Random.h" />
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Enemy.h" />

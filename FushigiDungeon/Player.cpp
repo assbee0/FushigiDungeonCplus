@@ -2,14 +2,14 @@
 #include "Game.h"
 #include "SpriteComponent.h"
 #include "MoveComponent.h"
-#include "BattleComponent.h"
+#include "PlayerBattle.h"
 
 Player::Player(Game *game):
 	GameObject(game)
 {
 	SpriteComponent* ps = new SpriteComponent(this, 100);
 	mc = new MoveComponent(this, true);
-	bc = new BattleComponent(this, true);
+	bc = new PlayerBattle(this);
 	ps->SetTexture(game->GetTexture("Player"));
 }
 

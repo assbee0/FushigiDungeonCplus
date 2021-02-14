@@ -3,10 +3,10 @@
 #include "Player.h"
 #include "MoveComponent.h"
 
-EnemyBattle::EnemyBattle(GameObject* gameObject):
-	BattleComponent(gameObject, false)
+EnemyBattle::EnemyBattle(GameObject* gameObject, Status status):
+	BattleComponent(gameObject)
 {
-	mStatus.Init(1, 3, 3, 2, 0, 2);
+	mStatus = status;
 }
 
 void EnemyBattle::Update()
@@ -19,11 +19,6 @@ void EnemyBattle::Update()
 		if (mTarget)
 			AttackAnimation();
 	}
-}
-
-void EnemyBattle::BeAttacked(int damage)
-{
-	mStatus.curHp -= damage;
 }
 
 void EnemyBattle::AttackOver()

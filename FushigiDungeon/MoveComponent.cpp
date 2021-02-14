@@ -6,6 +6,9 @@
 #include "Dungeon.h"
 #include "MapMaker.h"
 #include "Ladder.h"
+#include "MessageBox.h"
+#include "HealthItem.h"
+#include "PlayerBattle.h"
 
 MoveComponent::MoveComponent(GameObject* gameObject, bool isPlayer):
 	Component(gameObject),
@@ -99,9 +102,19 @@ void MoveComponent::ReachOneGrid()
 	{
 		if (mDst == mGameObject->GetGame()->GetLadder()->GetPosition())
 		{
-			mGameObject->GetGame()->NewFloor();
+			new MessageBox(mGameObject->GetGame());
+		}
+
+		HealthItem* hItem = mGameObject->GetGame()->GetHealthItem();
+		if (hItem != nullptr)
+		{
+			if (mDst == hItem->GetPosition())
+			{
+				int percent = mGameObject->GetGame()->GetHealthItem()->GetPercent();
+				mGameObject->GetComponent<PlayerBattle>()->RecoverHp(percent);
+				hItem->SetState(GameObject::State::EDead);
+			}
 		}
 	}
 
-	//mGameObject->SetInputEnabled(true);
 }

@@ -4,11 +4,10 @@
 class EnemyBattle : public BattleComponent
 {
 public:
-	EnemyBattle(class GameObject* gameObject);
+	EnemyBattle(class GameObject* gameObject, class Status status);
 	void Update() override;
 
 private:
-	void BeAttacked(int damage) override;
 	void AttackOver() override;
 	class BattleComponent* CheckTarget() override;
 };

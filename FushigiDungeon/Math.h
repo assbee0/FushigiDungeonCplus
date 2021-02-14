@@ -60,4 +60,5 @@ public:
 	static float Abs(float a);
 	static float Max(float a, float b);
 	static int Max(int a, int b);
+	static int Min(int a, int b);
 };

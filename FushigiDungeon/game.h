@@ -40,6 +40,8 @@ public:
 	class Dungeon* GetDungeon() const { return mDungeon; }
 	class Player* GetPlayer() const { return mPlayer; }
 	class Ladder* GetLadder() const { return mLadder; }
+	class HealthItem* GetHealthItem() { return mHealthItem; }
+	void SetHealthItem() { mHealthItem = nullptr; }
 	class Font* GetFont() const { return mFont; }
 	class HUD* GetHUD() const { return mHUD; }
 
@@ -72,6 +74,7 @@ private:
 	class Dungeon* mDungeon;
 	class CameraLock* mCamera;
 	class Ladder* mLadder;
+	class HealthItem* mHealthItem;
 	class Font* mFont;
 	class HUD* mHUD;
 };
