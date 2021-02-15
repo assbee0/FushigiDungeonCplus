@@ -1,13 +1,13 @@
 #include "Player.h"
 #include "Game.h"
-#include "SpriteComponent.h"
+#include "AnimeSprite.h"
 #include "MoveComponent.h"
 #include "PlayerBattle.h"
 
 Player::Player(Game *game):
 	GameObject(game)
 {
-	SpriteComponent* ps = new SpriteComponent(this, 100);
+	AnimeSprite* ps = new AnimeSprite(this, 100);
 	mc = new MoveComponent(this, true);
 	bc = new PlayerBattle(this);
 	ps->SetTexture(game->GetTexture("Player"));
@@ -36,6 +36,15 @@ void Player::ProcessInput(const Uint8* state)
 	{
 		mc->SetDir(Vector2::X);
 		bc->SetFacing(Vector2::X);
+	}
+
+	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
+	{
+		mc->SetSpeed(400);
+	}
+	else
+	{
+		mc->SetSpeed(150);
 	}
 }
 

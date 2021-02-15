@@ -144,6 +144,7 @@
   <ItemGroup>
     <ClCompile Include="AIComponent.cpp" />
     <ClCompile Include="AIState.cpp" />
+    <ClCompile Include="AnimeSprite.cpp" />
     <ClCompile Include="BattleComponent.cpp" />
     <ClCompile Include="BattleManager.cpp" />
     <ClCompile Include="Camera.cpp" />
@@ -152,6 +153,7 @@
     <ClCompile Include="Dungeon.cpp" />
     <ClCompile Include="Enemy.cpp" />
     <ClCompile Include="EnemyBattle.cpp" />
+    <ClCompile Include="GameClearUI.cpp" />
     <ClCompile Include="GameObject.cpp" />
     <ClCompile Include="GameOverUI.cpp" />
     <ClCompile Include="HealthItem.cpp" />
@@ -172,12 +174,13 @@
     <ClCompile Include="SpriteComponent.cpp" />
     <ClCompile Include="Font.cpp" />
     <ClCompile Include="Timer.cpp" />
-    <ClCompile Include="Timer.h" />
+    <ClCompile Include="TutorialUI.cpp" />
     <ClCompile Include="UIScreen.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIComponent.h" />
     <ClInclude Include="AIState.h" />
+    <ClInclude Include="AnimeSprite.h" />
     <ClInclude Include="BattleComponent.h" />
     <ClInclude Include="BattleManager.h" />
     <ClInclude Include="Camera.h" />
@@ -186,6 +189,7 @@
     <ClInclude Include="Dungeon.h" />
     <ClInclude Include="EnemyBattle.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="GameClearUI.h" />
     <ClInclude Include="GameObject.h" />
     <ClInclude Include="GameOverUI.h" />
     <ClInclude Include="HealthItem.h" />
@@ -204,6 +208,8 @@
     <ClInclude Include="SpriteComponent.h" />
     <ClInclude Include="Enemy.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="Timer.h" />
+    <ClInclude Include="TutorialUI.h" />
     <ClInclude Include="UIScreen.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

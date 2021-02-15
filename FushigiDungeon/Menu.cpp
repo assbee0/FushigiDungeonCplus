@@ -1,5 +1,6 @@
 #include "Menu.h"
 #include "Game.h"
+#include "TutorialUI.h"
 
 Menu::Menu(Game* game):
 	UIScreen(game)
@@ -23,6 +24,7 @@ Menu::Menu(Game* game):
 	Button* b2 = new Button(this);
 	b2->SetPosition(Vector2(WINDOWS_WIDTH / 2, 250));
 	b2->SetText("Help", Vector3(0.898f, 0.835f, 0.737f), 18, renderer);
+	b2->SetOnClick(HelpOnClick());
 
 	Button* b3 = new Button(this);
 	b3->SetPosition(Vector2(WINDOWS_WIDTH / 2, 320));
@@ -108,6 +110,14 @@ std::function<void()> Menu::ResumeOnClick()
 	return [this]()
 	{
 		Close();
+	};
+}
+
+std::function<void()> Menu::HelpOnClick()
+{
+	return [this]()
+	{
+		new TutorialUI(mGame);
 	};
 }
 

@@ -18,8 +18,6 @@ public:
 
 protected:
 	int mDrawOrder;
-
-private:
 	SDL_Texture* mTexture;
 	int mTexWidth;
 	int mTexHeight;

@@ -1,6 +1,6 @@
 #include "Enemy.h"
 #include "Game.h"
-#include "SpriteComponent.h"
+#include "AnimeSprite.h"
 #include "NavComponent.h"
 #include "AIComponent.h"
 #include "AIState.h"
@@ -17,7 +17,7 @@ Enemy::Enemy(Game* game, int number):
 {
 	LoadData("Data/EnemyData.enmy", number);
 
-	SpriteComponent* es = new SpriteComponent(this, 99);
+	AnimeSprite* es = new AnimeSprite(this, 99);
 	es->SetTexture(game->GetTexture(mName));
 
 	NavComponent* nav = new NavComponent(this);

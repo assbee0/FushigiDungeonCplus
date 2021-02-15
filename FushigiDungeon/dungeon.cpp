@@ -3,6 +3,7 @@
 #include "MapComponent.h"
 #include "BattleManager.h"
 #include "MapMaker.h"
+#include "GameClearUI.h"
 
 Dungeon::Dungeon(Game* game): 
 	GameObject(game),
@@ -32,4 +33,8 @@ void Dungeon::NewFloor()
 	GetComponent<MapComponent>()->SetMap(mMap);
 	mFloor++;
 	printf("Floor %d\n", mFloor);
+	if (mFloor == 20)
+	{
+		new GameClearUI(GetGame());
+	}
 }

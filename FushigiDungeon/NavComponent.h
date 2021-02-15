@@ -8,6 +8,8 @@ class NavComponent : public MoveComponent
 {
 public:
 	NavComponent(class GameObject* gameObject);
+	
+	void Update() override;
 	void Wander();
 	void Chase();
 	int PlayerDistance();

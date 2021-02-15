@@ -403,7 +403,7 @@ void Game::LoadData()
 {
 	LoadTexture("Sprites/Ground.spr","Ground");
 	LoadTexture("Sprites/Wall.spr","Wall");
-	LoadTexture("Sprites/chrA07.spr","Player");
+	LoadTexture("Sprites/Player.spr","Player");
 	LoadTexture("Sprites/SquareManWhite.spr","SquareManWhite");
 	LoadTexture("Sprites/SquareManGreen.spr","SquareManGreen");
 	LoadTexture("Sprites/SquareManYellow.spr","SquareManYellow");
@@ -421,6 +421,8 @@ void Game::LoadData()
 	LoadTexture("Sprites/ButtonOn.spr", "ButtonOn");
 	LoadTexture("Sprites/ButtonOnS.spr", "ButtonOnS");
 	LoadTexture("Sprites/GameOver.spr", "GameOver");
+	LoadTexture("Sprites/GameClear.spr", "GameClear");
+	LoadTexture("Sprites/Tutorial.spr", "Tutorial");
 	LoadFont("Font/Carlito-Regular.ttf", "Carlito");
 
 	mDungeon = new Dungeon(this);

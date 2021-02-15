@@ -11,6 +11,7 @@ public:
 	
 	bool GetIsMoving() const { return mIsMoving; }
 	void SetMap(class Map* map) { mMap = map; }
+	float GetSpeed() const { return mSpeed; }
 	void SetSpeed(float speed) { mSpeed = speed; }
 	void SetDir(Vector2 dir);
 	Vector2 GetDst()const { return mDst; }

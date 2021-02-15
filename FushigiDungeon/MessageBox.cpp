@@ -30,7 +30,7 @@ MessageBox::MessageBox(Game* game):
 
 MessageBox::~MessageBox()
 {
-	mGame->SetGameState(Game::GameState::GPlay);
+	//mGame->SetGameState(Game::GameState::GPlay);
 }
 
 void MessageBox::InputKeyPressed(int key)
@@ -72,6 +72,7 @@ std::function<void()> MessageBox::ConfirmOnClick()
 	return [this]()
 	{
 		Close();
+		mGame->SetGameState(Game::GameState::GPlay);
 		mGame->NewFloor();
 	};
 }
@@ -81,5 +82,6 @@ std::function<void()> MessageBox::CancelOnClick()
 	return [this]()
 	{
 		Close();
+		mGame->SetGameState(Game::GameState::GPlay);
 	};
 }

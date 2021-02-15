@@ -11,6 +11,7 @@ public:
 
 private:
 	std::function<void()> ResumeOnClick();
+	std::function<void()> HelpOnClick();
 	std::function<void()> QuitOnClick();
 
 };

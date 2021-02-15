@@ -11,6 +11,12 @@ NavComponent::NavComponent(GameObject* gameObject):
 
 }
 
+void NavComponent::Update()
+{
+	MoveComponent::Update();
+	mSpeed = mPlayer->GetComponent<MoveComponent>()->GetSpeed();
+}
+
 void NavComponent::Wander()
 {
 	std::vector<Vector2> dirs;

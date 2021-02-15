@@ -28,7 +28,7 @@
     },
     {
         "number":3,
-        "name":"SquareManYellow",
+        "name":"SquareManBlue",
 	"level":4,
         "maxhp":12,
 	"atk":6,
@@ -37,7 +37,7 @@
     },
     {
         "number":4,
-        "name":"SquareManBlue",
+        "name":"SquareManYellow",
 	"level":6,
         "maxhp":20,
 	"atk":10,
