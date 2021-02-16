@@ -136,6 +136,7 @@ std::function<void()> GameOverUI::RestartOnClick()
 {
 	return [this]()
 	{
+		Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 		mGame->Restart();
 	};
 }

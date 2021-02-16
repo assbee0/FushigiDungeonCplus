@@ -31,6 +31,7 @@ void EnemyBattle::AttackOver()
 	{
 		AttackTarget();
 		mTarget = nullptr;
+		Mix_PlayChannel(-1, mGameObject->GetGame()->GetSound("Attack2"), 0);
 	}
 }
 

@@ -3,6 +3,7 @@
 #include <vector>
 #include <unordered_map>
 #include "SDL.h"
+#include "SDL_mixer.h"
 
 #define WINDOWS_WIDTH 640
 #define WINDOWS_HEIGHT 480
@@ -21,6 +22,8 @@ public:
 	void CreateEnemy(class Enemy* enemy);
 	void RemoveEnemy(class Enemy* enemy);
 	SDL_Texture* GetTexture(const std::string &filename);
+	Mix_Music* GetMusic(const std::string &filename);
+	Mix_Chunk* GetSound(const std::string &filename);
 	void PushUI(class UIScreen* ui);
 	void NewFloor();
 	void Restart();
@@ -55,9 +58,13 @@ private:
 	void UnloadData();
 	void LoadTexture(const std::string& filename);
 	void LoadTexture(const std::string& filename, const std::string& newname);
+	void LoadMusic(const std::string& filename, const std::string& newname);
+	void LoadSound(const std::string& filename, const std::string& newname);
 	void LoadFont(const std::string& filename, const std::string& newname);
 
 	std::unordered_map<std::string, SDL_Texture*> mTextures;
+	std::unordered_map<std::string, Mix_Music*> mMusics;
+	std::unordered_map<std::string, Mix_Chunk*> mSounds;
 	std::vector<class UIScreen*> mUIStack;
 
 	std::vector<class GameObject*> mGameObjects;

@@ -6,6 +6,7 @@ Menu::Menu(Game* game):
 	UIScreen(game)
 {
 	mGame->SetGameState(Game::GameState::GPaused);
+	Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 	
 	SDL_Renderer* renderer = game->GetRenderer();
 	mTexBackground = game->GetTexture("MenuBack");
@@ -44,6 +45,7 @@ void Menu::InputKeyPressed(int key)
 	switch (key)
 	{
 	case SDLK_ESCAPE:
+		Mix_PlayChannel(-1, mGame->GetSound("Cancel"), 0);
 		Close();
 		break;
 	case SDLK_DOWN:
@@ -109,6 +111,7 @@ std::function<void()> Menu::ResumeOnClick()
 {
 	return [this]()
 	{
+		Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 		Close();
 	};
 }
@@ -117,6 +120,7 @@ std::function<void()> Menu::HelpOnClick()
 {
 	return [this]()
 	{
+		Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 		new TutorialUI(mGame);
 	};
 }

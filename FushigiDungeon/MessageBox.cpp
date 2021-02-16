@@ -5,6 +5,7 @@ MessageBox::MessageBox(Game* game):
 	UIScreen(game)
 {
 	game->SetGameState(Game::GameState::GPaused);
+	Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 
 	SDL_Renderer* renderer = game->GetRenderer();
 	mTexBackground = game->GetTexture("MessageBack");
@@ -39,6 +40,11 @@ void MessageBox::InputKeyPressed(int key)
 
 	switch (key)
 	{
+	case SDLK_ESCAPE:
+		Mix_PlayChannel(-1, mGame->GetSound("Cancel"), 0);
+		mGame->SetGameState(Game::GameState::GPlay);
+		Close();
+		break;
 	case SDLK_LEFT:
 	case SDLK_a:
 	case SDLK_RIGHT:
@@ -72,6 +78,7 @@ std::function<void()> MessageBox::ConfirmOnClick()
 	return [this]()
 	{
 		Close();
+		Mix_PlayChannel(-1, mGame->GetSound("Stairs"), 0);
 		mGame->SetGameState(Game::GameState::GPlay);
 		mGame->NewFloor();
 	};
@@ -82,6 +89,7 @@ std::function<void()> MessageBox::CancelOnClick()
 	return [this]()
 	{
 		Close();
+		Mix_PlayChannel(-1, mGame->GetSound("Cancel"), 0);
 		mGame->SetGameState(Game::GameState::GPlay);
 	};
 }

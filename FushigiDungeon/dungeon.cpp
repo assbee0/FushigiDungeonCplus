@@ -33,8 +33,23 @@ void Dungeon::NewFloor()
 	GetComponent<MapComponent>()->SetMap(mMap);
 	mFloor++;
 	printf("Floor %d\n", mFloor);
-	if (mFloor == 20)
+	
+	switch (mFloor)
 	{
+	case 6:
+		Mix_PlayMusic(GetGame()->GetMusic("Dungeon2"), -1);
+		break;
+	case 12:
+		Mix_PlayMusic(GetGame()->GetMusic("Dungeon3"), -1);
+		break;
+	case 18:
+		Mix_PlayMusic(GetGame()->GetMusic("Dungeon4"), -1);
+		break;
+	case 20:
+		Mix_PlayMusic(GetGame()->GetMusic("Victory"), -1);
 		new GameClearUI(GetGame());
+		break;
+	default:
+		break;
 	}
 }

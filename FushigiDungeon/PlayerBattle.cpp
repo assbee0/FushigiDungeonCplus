@@ -16,6 +16,7 @@ PlayerBattle::PlayerBattle(GameObject* gameObject):
 void PlayerBattle::AttackTarget()
 {
 	BattleComponent::AttackTarget();
+	Mix_PlayChannel(-1, mGameObject->GetGame()->GetSound("Attack1"), 0);
 	if (mTarget->IsDead())
 	{
 		mStatus.exp -= mTarget->GetExp();
@@ -34,20 +35,25 @@ void PlayerBattle::BeAttacked(int damage)
 	if (IsDead())
 	{
 		printf("ÄãÀ­Ï¡ÁË\n");
+		Mix_PlayMusic(mGameObject->GetGame()->GetMusic("Defeat"), 1);
 		new GameOverUI(mGameObject->GetGame(), mStatus.level, mGameObject->GetGame()->GetDungeon()->GetFloor());
-		//mGameObject->GetGame()->SetGameState(Game::GameState::GQuit);
 	}
 }
 
 void PlayerBattle::AttackOver()
 {
 	BattleComponent::AttackOver();
+	Mix_PlayChannel(-1, mGameObject->GetGame()->GetSound("Attack3"), 0);
 	mGameObject->GetGame()->GetDungeon()
 		->GetComponent<BattleManager>()->NewTurn();
 }
 
 void PlayerBattle::RecoverHp(int curePercent)
 {
+	if (curePercent == 20)
+		Mix_PlayChannel(-1, mGameObject->GetGame()->GetSound("Cure1"), 0);
+	else
+		Mix_PlayChannel(-1, mGameObject->GetGame()->GetSound("Cure2"), 0);
 	int cure = mStatus.maxHp * curePercent / 100;
 	mStatus.curHp += cure;
 	if (mStatus.curHp > mStatus.maxHp)
@@ -70,6 +76,7 @@ void PlayerBattle::LevelUp()
 		mStatus.exp = mPreNeededExp + 3 * mStatus.level;
 		mPreNeededExp = mStatus.exp;
 		mStatus.exp -= expOverflow;
+		Mix_PlayChannel(-1, mGameObject->GetGame()->GetSound("LevelUp"), 0);
 	}
 }
 

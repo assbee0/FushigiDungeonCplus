@@ -66,6 +66,12 @@ bool Game::Initialize()
 		return false;
 	}
 
+	if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 1024) == -1)
+	{
+		SDL_Log("Failed to initialize SDL_mixer");
+		return false;
+	}
+
 	Timer::deltaTime = 0;
 	Timer::ticksCount = 0;
 
@@ -97,6 +103,7 @@ void Game::Shutdown()
 	UnloadData();
 	IMG_Quit();
 	TTF_Quit();
+	Mix_CloseAudio();
 }
 
 void Game::CreateGameObject(GameObject* gameObject)
@@ -175,6 +182,28 @@ SDL_Texture* Game::GetTexture(const std::string& filename)
 	return tex;
 }
 
+Mix_Music* Game::GetMusic(const std::string& filename)
+{
+	Mix_Music* music = nullptr;
+	auto iter = mMusics.find(filename);
+	if (iter != mMusics.end())
+	{
+		music = iter->second;
+	}
+	return music;
+}
+
+Mix_Chunk* Game::GetSound(const std::string& filename)
+{
+	Mix_Chunk* sound = nullptr;
+	auto iter = mSounds.find(filename);
+	if (iter != mSounds.end())
+	{
+		sound = iter->second;
+	}
+	return sound;
+}
+
 void Game::PushUI(UIScreen* ui)
 {
 	mUIStack.emplace_back(ui);
@@ -224,6 +253,7 @@ void Game::NewFloor()
 	else
 		mHealthItem = new HealthItem(this, 1);
 	mHealthItem->SetPosition(map->GetRandomPos());
+
 }
 
 void Game::Restart()
@@ -231,6 +261,7 @@ void Game::Restart()
 	UnloadData();
 	LoadData();
 	mGameState = GameState::GPlay;
+	Mix_PlayChannel(-1, GetSound("Menu"), 0);
 }
 
 void Game::Event()
@@ -424,6 +455,24 @@ void Game::LoadData()
 	LoadTexture("Sprites/GameClear.spr", "GameClear");
 	LoadTexture("Sprites/Tutorial.spr", "Tutorial");
 	LoadFont("Font/Carlito-Regular.ttf", "Carlito");
+	LoadMusic("Music/Dungeon1.mp3","Dungeon1");
+	LoadMusic("Music/Dungeon2.mp3","Dungeon2");
+	LoadMusic("Music/Dungeon3.mp3","Dungeon3");
+	LoadMusic("Music/Dungeon4.mp3","Dungeon4");
+	LoadMusic("Music/Victory.mp3","Victory");
+	LoadMusic("Music/Defeat.mp3","Defeat");
+	LoadSound("Sound/Attack1.wav","Attack1");
+	LoadSound("Sound/Attack2.wav","Attack2");
+	LoadSound("Sound/Attack3.mp3","Attack3");
+	LoadSound("Sound/Cancel.wav","Cancel");
+	LoadSound("Sound/Menu.wav","Menu");
+	LoadSound("Sound/Stairs.wav","Stairs");
+	LoadSound("Sound/LevelUp.mp3","LevelUp");
+	LoadSound("Sound/Cure1.mp3","Cure1");
+	LoadSound("Sound/Cure2.mp3","Cure2");
+
+	Mix_PlayMusic(GetMusic("Dungeon1"), -1);
+	Mix_VolumeMusic(64);
 
 	mDungeon = new Dungeon(this);
 	mPlayer = new Player(this);
@@ -470,6 +519,18 @@ void Game::UnloadData()
 	}
 	mTextures.clear();
 
+	for (auto music : mMusics)
+	{
+		Mix_FreeMusic(music.second);
+	}
+	mMusics.clear();
+
+	for (auto sound : mSounds)
+	{
+		Mix_FreeChunk(sound.second);
+	}
+	mSounds.clear();
+
 	delete mFont;
 }
 
@@ -502,28 +563,45 @@ void Game::LoadTexture(const std::string &filename)
 
 void Game::LoadTexture(const std::string& filename, const std::string& newname)
 {
-	auto iter = mTextures.find(filename);
-	if (iter != mTextures.end())
+	
+	SDL_Surface* surf = IMG_Load(filename.c_str());
+	if (!surf)
 	{
-		SDL_Log("Texture %s has been already loaded", filename.c_str());
+		SDL_Log("Failed to load texture file %s", filename.c_str());
 	}
-	else
+
+	SDL_Texture* tex = SDL_CreateTextureFromSurface(mRenderer, surf);
+	SDL_FreeSurface(surf);
+	if (!tex)
 	{
-		SDL_Surface* surf = IMG_Load(filename.c_str());
-		if (!surf)
-		{
-			SDL_Log("Failed to load texture file %s", filename.c_str());
-		}
-
-		SDL_Texture* tex = SDL_CreateTextureFromSurface(mRenderer, surf);
-		SDL_FreeSurface(surf);
-		if (!tex)
-		{
-			SDL_Log("Failed to convert surface to texture for %s", filename.c_str());
-		}
-
-		mTextures.emplace(newname.c_str(), tex);
+		SDL_Log("Failed to convert surface to texture for %s", filename.c_str());
 	}
+
+	mTextures.emplace(newname.c_str(), tex);
+}
+
+void Game::LoadMusic(const std::string& filename, const std::string& newname)
+{
+	
+	Mix_Music* music;
+	music = Mix_LoadMUS(filename.c_str());
+	if (!music)
+	{
+		SDL_Log("Failed to load music file %s", filename.c_str());
+	}
+	mMusics.emplace(newname.c_str(), music);
+}
+
+void Game::LoadSound(const std::string& filename, const std::string& newname)
+{
+
+	Mix_Chunk* sound;
+	sound = Mix_LoadWAV(filename.c_str());
+	if (!sound)
+	{
+		SDL_Log("Failed to load music file %s", filename.c_str());
+	}
+	mSounds.emplace(newname.c_str(), sound);
 }
 
 void Game::LoadFont(const std::string& filename, const std::string& newname)
