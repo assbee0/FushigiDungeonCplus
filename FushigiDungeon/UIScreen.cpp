@@ -32,13 +32,15 @@ UIScreen::~UIScreen()
 }
 
 void UIScreen::ProcessInput(const uint8_t* state)
+// Process keyboard and mouse state (mainly for mouse)
 {
 	if (!mButtons.empty())
 	{
 		int mouseX, mouseY;
 		SDL_GetMouseState(&mouseX, &mouseY);
+		// Current mouse cursor position on the screen
 		Vector2 mousePos = Vector2(static_cast<float>(mouseX), static_cast<float>(mouseY));
-
+		// Check if there is button selected by mouse
 		for (auto b : mButtons)
 		{
 			if (b->ContainsMouse(mousePos))
@@ -54,16 +56,19 @@ void UIScreen::ProcessInput(const uint8_t* state)
 }
 
 void UIScreen::InputKeyPressed(int key)
+// Process keyboard or mouse pressed
 {
 	switch (key)
 	{
 	case SDL_BUTTON_LEFT:
 	case SDLK_SPACE:
 	case SDLK_RETURN:
+		// Click the button
 		if (!mButtons.empty())
 		{
 			for (auto b : mButtons)
 			{
+				// Click and execute the selected button
 				if (b->GetIsSelected())
 				{
 					b->OnClick();
@@ -83,26 +88,32 @@ void UIScreen::Update()
 }
 
 void UIScreen::Draw(SDL_Renderer* renderer)
+// Draw background, main text, and buttons
 {
+	// Draw background
 	SDL_Rect backRect = SDL_Rect();
 	if (mTexBackground)
 	{
 		backRect = TextureRect(mTexBackground, mBackPos);
 		SDL_RenderCopy(renderer, mTexBackground, nullptr, &backRect);
 	}
+	// Draw main text
 	if (mText)
 	{
 		int w;
 		int h;
+		// Get the texture's width and height
 		SDL_QueryTexture(mText, nullptr, nullptr, &w, &h);
 		SDL_Rect dstrect;
 		dstrect.w = w;
 		dstrect.h = h;
+		// If text is set to be center, set the position to the center of the background
 		if (mTextCenter)
 		{
 			dstrect.x = backRect.x + backRect.w / 2 - w / 2;
 			dstrect.y = backRect.y + backRect.h / 2 - h / 2;
 		}
+		// Or set the position to mTextPos
 		else
 		{
 			dstrect.x = static_cast<int>(mTextPos.x - w / 2.0f);
@@ -110,16 +121,19 @@ void UIScreen::Draw(SDL_Renderer* renderer)
 		}
 		SDL_RenderCopy(renderer, mText, nullptr, &dstrect);
 	}
+	// Draw buttons
 	for (auto b : mButtons)
 	{
 		SDL_Texture* texB = nullptr;
+		// Select the button's texture depending on if selected
 		if (b->GetIsSelected())
 			texB = mButtonOn;
 		else
 			texB = mButtonOff;
+		// Draw button's background
 		SDL_Rect dstrect = TextureRect(texB, b->GetPosition());
 		SDL_RenderCopy(renderer, texB, nullptr, &dstrect);
-
+		// Draw button's text
 		SDL_Texture* texT = b->GetText();
 		dstrect = TextureRect(texT, b->GetPosition());
 		SDL_RenderCopy(renderer, texT, nullptr, &dstrect);
@@ -127,6 +141,7 @@ void UIScreen::Draw(SDL_Renderer* renderer)
 }
 
 void UIScreen::SetText(const std::string& text, const Vector3& color, int size, SDL_Renderer* renderer)
+// Set main text
 {
 	if (mText)
 	{
@@ -152,6 +167,7 @@ void UIScreen::AddButton(Button* button)
 }
 
 void UIScreen::ResetButtonState()
+// Reset all the buttons to the state unselected
 {
 	for (auto b : mButtons)
 	{
@@ -160,16 +176,19 @@ void UIScreen::ResetButtonState()
 }
 
 void UIScreen::ResetButtonPointer()
+// Reset the pointer of current button to null pointer
 {
 	mCurButton = nullptr;
 }
 
 void UIScreen::Close()
+// Close and free this UI
 {
 	mState = UIState::UDead;
 }
 
 SDL_Rect UIScreen::TextureRect(SDL_Texture* tex, Vector2 pos)
+// Use texture and its position to get SDL_Rect of this texture
 {
 	int w;
 	int h;
@@ -203,6 +222,7 @@ Button::~Button()
 }
 
 void Button::SetText(const std::string& text, const Vector3& color, int size, SDL_Renderer* renderer)
+// Set button's text
 {
 	if (mText)
 	{
@@ -218,6 +238,7 @@ void Button::SetText(const std::string& text, const Vector3& color, int size, SD
 }
 
 bool Button::ContainsMouse(Vector2 mouse)
+// Check if mouse cursor is in this button
 {
 	bool ifX = (mouse.x >= mPosition.x - mWidth / 2.0f && mouse.x <= mPosition.x + mWidth / 2.0f);
 	bool ifY = (mouse.y >= mPosition.y - mHeight / 2.0f && mouse.y <= mPosition.y + mHeight / 2.0f);
@@ -225,6 +246,7 @@ bool Button::ContainsMouse(Vector2 mouse)
 }
 
 void Button::OnClick()
+// Process function when clicked
 {
 	if (mOnClick)
 	{

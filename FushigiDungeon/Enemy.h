@@ -10,6 +10,7 @@ public:
 	~Enemy();
 
 private:
+	// Get enmey status from the file
 	bool LoadData(const std::string& fileName, int number);
 
 	int mNumber;

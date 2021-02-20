@@ -14,16 +14,22 @@ public:
 	GameObject(class Game* game);
 	virtual ~GameObject();
 
+	// Update per frame, cannot be override
 	void UpdateGameObject();
+	// LateUpdate is called after Update, cannot be override
 	void LateUpdateGameObject();
+	// Update components attached to this game object per frame
 	void UpdateComponents();
+	// LateUpdate is called after Update
 	void LateUpdateComponents();
+	// Can be override
 	virtual void Update();
+	// Can be override
 	virtual void LateUpdate();
 	void AddComponent(class Component* component);
 	void RemoveComponent(class Component* component);
 
-
+	// Get the component from the object, and transform its type to subclass T
 	template<typename T> T* GetComponent()
 	{
 		for (auto com : mComponents)

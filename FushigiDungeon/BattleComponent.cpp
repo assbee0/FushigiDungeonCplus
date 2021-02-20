@@ -40,10 +40,13 @@ void BattleComponent::SetBattling()
 }
 
 BattleComponent* BattleComponent::CheckTarget()
+// Check if a target on current attack direction
 {
 	Vector2 curPos = mGameObject->GetPosition();
 	Vector2 dstPos;
+	// Facing grid
 	dstPos = curPos + mFacing * 32;
+	// Check if an enemy on facing grid
 	std::vector<Enemy*> enemies = mGameObject->GetGame()->GetEnemies();
 	for (auto enemy : enemies)
 	{
@@ -54,14 +57,18 @@ BattleComponent* BattleComponent::CheckTarget()
 }
 
 void BattleComponent::AttackTarget()
+// Compute the attack damage
 {
 	int damage = mStatus.atk;
 	mTarget->BeAttacked(damage);
 }
 
 void BattleComponent::BeAttacked(int damage)
+// Receive damage and compute the real damage
 {
+	// Damage computation is attack - defense
 	int realDamage = Mathf::Max(damage - mStatus.def, 0);
+	// When attack <= defense, 50% to give 1 damage or 0 damage
 	if (realDamage == 0)
 	{
 		realDamage = Random::GetIntRange(0, 1);
@@ -75,16 +82,19 @@ void BattleComponent::AttackAnimation()
 	Vector2 curPos = mGameObject->GetPosition();
 	Vector2 tempPos;
 	mAnimeCount += animeSpeed;
+	// Attack animation first part : Move one grid
 	if (mAnimeCount < 32)
 	{
 		tempPos = curPos + mFacing * animeSpeed;
 		mGameObject->SetPosition(tempPos);
 	}
+	// Attack animation second part : Return one grid to the start grid
 	else if (mAnimeCount < 64)
 	{
 		tempPos = curPos - mFacing * animeSpeed;
 		mGameObject->SetPosition(tempPos);
 	}
+	// Animation is over
 	else
 	{
 		AttackOver();
@@ -93,10 +103,11 @@ void BattleComponent::AttackAnimation()
 
 void BattleComponent::AttackOver()
 {
+	// Reset variables
 	mGameObject->SetPosition(mStartPos);
 	mIsBattling = false;
 	mAnimeCount = 0;
-
+	// Check if there is an enemy on the attacked grid
 	mTarget = CheckTarget();
 	if (mTarget)
 	{
@@ -106,6 +117,7 @@ void BattleComponent::AttackOver()
 }
 
 Status::Status():
+	// Player's initial status
 	level(1),
 	curHp(10),
 	maxHp(10),

@@ -19,12 +19,15 @@ SpriteComponent::~SpriteComponent()
 }
 
 void SpriteComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
+// Draw sprite according to the camera position
 {
 	if (!mTexture)
 		return;
 	SDL_Rect dstrect;
+	// Get the size of this sprite
 	dstrect.w = static_cast<int>(mTexWidth * mGameObject->GetScale().x);
 	dstrect.h = static_cast<int>(mTexHeight * mGameObject->GetScale().y);
+	// Get the position to blit on the screen
 	Vector2 drawPos = cam->WorldToCamera(mGameObject->GetPosition());
 	dstrect.x = static_cast<int>(drawPos.x);
 	dstrect.y = static_cast<int>(drawPos.y);
@@ -32,7 +35,9 @@ void SpriteComponent::Draw(SDL_Renderer* renderer, CameraLock* cam)
 }
 
 void SpriteComponent::SetTexture(SDL_Texture* texture)
+// Set the sprite to this component
 {
 	mTexture = texture;
+	// Get the width and height from the texture
 	SDL_QueryTexture(texture, nullptr, nullptr, &mTexWidth, &mTexHeight);
 }

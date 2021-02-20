@@ -33,6 +33,8 @@ class Map
 {
 public:
 	Map(int* array, int w, int h);
+
+	// Get a random position from all of the rooms
 	class Vector2 GetRandomPos();
 
 	int* mapArray;
@@ -56,13 +58,22 @@ public:
 		{ mMapW = w; mMapH = h; mRoomMaxW = rw; mRoomMaxH = rh; }
 
 private:
+	// Build a rw * rh room and the left up position is (rx, ry)
+	// The area which is able to walk through is (rw - 1) * (rh - 1)
 	void BuildRoom(class Room room);
+	// Build a new room from this wall
 	void BuildConnectRoom(class Room &room, class Wall &wall);
+	// Randomly choose a wall from current mWalls
 	class Wall ChooseWall();
+	// Try generating a random room from this wall
 	Room CheckRoom(class Wall& wall);
+	// Check if room r intersects with any of the rooms generated
 	bool CheckIntersect(class Room& r);
+	// Check if room r1 intersects with room r2
 	bool RoomIntersect(class Room& r1, class Room& r2);
+	// Remove the wall from mWalls
 	void RemoveWall(class Wall& wall);
+	// Output the map array and all the walls on the console window
 	void PrintMap();
 
 	int* mMapArray;
@@ -71,7 +82,9 @@ private:
 
 	int mMapW;
 	int mMapH;
+	// Max width of the room can be generated
 	int mRoomMaxW;
+	// Max height of the room can be generated
 	int mRoomMaxH;
 	class Wall mDir;
 };

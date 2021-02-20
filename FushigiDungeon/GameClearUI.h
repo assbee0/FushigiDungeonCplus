@@ -5,6 +5,7 @@ class GameClearUI : public UIScreen
 {
 public:
 	GameClearUI(class Game* game);
+	// Input from keyboard pressed
 	void InputKeyPressed(int key) override;
 
 private:

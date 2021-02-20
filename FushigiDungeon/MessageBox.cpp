@@ -4,20 +4,23 @@
 MessageBox::MessageBox(Game* game):
 	UIScreen(game)
 {
+	// Run into GPaused to process UI input
 	game->SetGameState(Game::GameState::GPaused);
 	Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 
+	// Set background
 	SDL_Renderer* renderer = game->GetRenderer();
 	mTexBackground = game->GetTexture("MessageBack");
 	mBackPos = Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT / 2);
-
+	// Set main text
 	mTextCenter = false;
 	mTextPos = Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT * 2 / 5);
 	SetText("Go to next floor ?", Vector3(0.286f, 0.141f, 0.055f), 28, renderer);
 
+	// Set buttons
 	mButtonOff = game->GetTexture("ButtonOffS");
 	mButtonOn = game->GetTexture("ButtonOnS");
-
+	// Two buttons are placed in horizontal
 	Button* b1 = new Button(this);
 	b1->SetPosition(Vector2(WINDOWS_WIDTH * 2 / 5, WINDOWS_HEIGHT * 3 / 5));
 	b1->SetText("Yes", Vector3(0.898f, 0.835f, 0.737f), 18, renderer);
@@ -41,6 +44,7 @@ void MessageBox::InputKeyPressed(int key)
 	switch (key)
 	{
 	case SDLK_ESCAPE:
+		// Press esc to close the message box
 		Mix_PlayChannel(-1, mGame->GetSound("Cancel"), 0);
 		mGame->SetGameState(Game::GameState::GPlay);
 		Close();
@@ -49,6 +53,8 @@ void MessageBox::InputKeyPressed(int key)
 	case SDLK_a:
 	case SDLK_RIGHT:
 	case SDLK_d:
+		// Select two horizontal buttons
+		// The first selected button is left button
 		if (mCurButton == nullptr)
 		{
 			ResetButtonState();
@@ -80,6 +86,7 @@ std::function<void()> MessageBox::ConfirmOnClick()
 		Close();
 		Mix_PlayChannel(-1, mGame->GetSound("Stairs"), 0);
 		mGame->SetGameState(Game::GameState::GPlay);
+		// Generate and set new floor
 		mGame->NewFloor();
 	};
 }

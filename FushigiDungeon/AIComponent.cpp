@@ -26,11 +26,12 @@ void AIComponent::Update()
 
 void AIComponent::ChangeState(const std::string& name)
 {
+	// Exit from the current state
 	if (mCurState)
 	{
 		mCurState->OnExit();
 	}
-
+	// Enter the new state
 	auto iter = mStateMap.find(name);
 	if (iter != mStateMap.end())
 	{
@@ -54,6 +55,7 @@ bool AIComponent::GetIsIdle()
 
 void AIComponent::SetStartMove(bool start)
 {
+	// announce this ai to start move
 	mStartMove = start; 
 	mPlayerDistance = mNav->PlayerDistance(); 
 }

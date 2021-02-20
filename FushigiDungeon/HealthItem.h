@@ -7,10 +7,10 @@ public:
 	HealthItem(class Game* game, int number);
 	~HealthItem();
 
-	int PercentHealth(int maxHp);
 	int GetPercent() const { return mPercent; }
 
 private:
 	int mNumber;
+	// Health percent of max hp
 	int mPercent;
 };

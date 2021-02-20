@@ -33,21 +33,26 @@ AIIdle::AIIdle(AIComponent* component) :
 
 void AIIdle::Update()
 {
+	// The enemy is dead, enter state Death
 	if (mComponent->GetEb()->IsDead())
 	{
 		mComponent->ChangeState("Death");
 		return;
 	}
+	// If the ai is asked to start move
 	if (mComponent->GetStartMove())
 	{
+		// Beside the player, enter state Attack
 		if (mComponent->GetPlayerDis() <= 1)
 		{
 			mComponent->ChangeState("Attack");
 		}
+		// The player is in the alert area of the enemy, enter state Chase
 		else if (mComponent->GetPlayerDis() <= 6)
 		{
 			mComponent->ChangeState("Chase");
 		}
+		// The player is far from the enemy, enter state Wander
 		else
 		{
 			mComponent->ChangeState("Wander");
@@ -73,6 +78,7 @@ AIWander::AIWander(AIComponent* component) :
 
 void AIWander::Update()
 {
+	// When moving a grid is over, return state Idle
 	if (!mComponent->GetNav()->GetIsMoving())
 	{
 		mComponent->ChangeState("Idle");
@@ -97,6 +103,7 @@ AIChase::AIChase(AIComponent* component) :
 
 void AIChase::Update()
 {
+	// When moving a grid is over, return state Idle
 	if (!mComponent->GetNav()->GetIsMoving())
 	{
 		mComponent->ChangeState("Idle");
@@ -121,6 +128,7 @@ AIAttack::AIAttack(AIComponent* component) :
 
 void AIAttack::Update()
 {
+	// When attacking is over, return state Idle
 	if (!mComponent->GetEb()->GetBattling())
 	{
 		mComponent->ChangeState("Idle");
@@ -129,6 +137,7 @@ void AIAttack::Update()
 
 void AIAttack::OnEnter()
 {
+	// inform the enemy battle object to start battle
 	mComponent->GetEb()->SetBattling();
 }
 

@@ -22,6 +22,7 @@ GameObject::~GameObject()
 }
 
 void GameObject::UpdateGameObject()
+// Update per frame, cannot be override
 {
 	if (mState == State::EActive)
 	{
@@ -31,6 +32,7 @@ void GameObject::UpdateGameObject()
 }
 
 void GameObject::LateUpdateGameObject()
+// LateUpdate is called after Update, cannot be override
 {
 	if (mState == State::EActive)
 	{
@@ -40,6 +42,7 @@ void GameObject::LateUpdateGameObject()
 }
 
 void GameObject::UpdateComponents()
+// Update components attached to this game object per frame
 {
 	for (auto component : mComponents)
 	{
@@ -48,6 +51,7 @@ void GameObject::UpdateComponents()
 }
 
 void GameObject::LateUpdateComponents()
+// LateUpdate is called after Update
 {
 	for (auto component : mComponents)
 	{
@@ -56,19 +60,23 @@ void GameObject::LateUpdateComponents()
 }
 
 void GameObject::Update()
+// Can be override
 {
 
 }
 
 void GameObject::LateUpdate()
+// Can be override
 {
 
 }
 
 void GameObject::AddComponent(Component* component)
 {
+	// Components have their update order
 	int order = component->GetUpdateOrder();
 	auto iter = mComponents.begin();
+	// New component has to be inserted in order
 	for ( ;iter != mComponents.end(); ++iter)
 	{
 		if (order < (*iter)->GetUpdateOrder())

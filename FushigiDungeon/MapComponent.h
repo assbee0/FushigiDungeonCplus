@@ -8,7 +8,9 @@ public:
 	MapComponent(class GameObject* gameObject, class Map* map);
 	~MapComponent();
 
+	// Draw map according to the camera position
 	void Draw(SDL_Renderer* renderer, class CameraLock* cam) override;
+	// Add the map tile sprite
 	void SetTexture(SDL_Texture* texture) override;
 
 	int* GetMap() { return mMapArray; }

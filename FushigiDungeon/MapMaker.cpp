@@ -17,24 +17,35 @@ MapMaker::MapMaker(GameObject* gameObject, int w, int h, int rw, int rh) :
 
 Map* MapMaker::BuildMap()
 {
+	// Init an 1-d array
 	mMapArray = new int[mMapW * mMapH];
 	mRooms.clear();
 	mWalls.clear();
+	// Init to zero, zero means undiscovered
 	for (int i = 0; i < mMapW * mMapH; i++)
 		mMapArray[i] = 0;
+	// Build first room at the center of the map
 	BuildRoom(Room(6, 6, mMapW / 2 - 3, mMapH / 2 - 3));
 
+	// Record times failed to choose a wall
 	int randomCountWall = 0;
+	// Record times failed to build a room from a specific wall
 	int randomCountRoom = 0;
 
 	Room room = Room(0, 0, 0, 0);
+	// While failing times to choose walls are not over preset times
+	// Or Every wall in the map has been chosen to try building a room
 	while (randomCountWall < 100 && !mWalls.empty())
 	{
+		// Randomly choose a wall as start point
 		Wall wall = ChooseWall();
 		
+		// Failing times to build a room from this wall are not over preset times
 		while (randomCountRoom < 10)
 		{
+			// Try building a room from this wall
 			room = CheckRoom(wall);
+			// room's member rw equals to 0 means false
 			if (room.rw == 0)
 				randomCountRoom++;
 			else
@@ -43,14 +54,17 @@ Map* MapMaker::BuildMap()
 				break;
 			}
 		}
+		// Failing times are over preset times
 		if (randomCountRoom >= 10)
 		{
 			randomCountWall++;
 			randomCountRoom = 0;
+			// This wall will be abandoned
 			RemoveWall(wall);
 			continue;
 		}
 		else
+			// Build a new room from this wall
 			BuildConnectRoom(room, wall);
 	}
 
@@ -61,6 +75,8 @@ Map* MapMaker::BuildMap()
 }
 
 void MapMaker::BuildRoom(Room room)
+// Build a rw * rh room and the left up position is (rx, ry)
+// The area which is able to walk through is (rw - 1) * (rh - 1)
 {
 	for (int j = 0; j < room.rh; j++)
 	{
@@ -68,31 +84,40 @@ void MapMaker::BuildRoom(Room room)
 		{
 			if (i == 0 || j == 0 || i == room.rw - 1 || j == room.rh - 1)
 			{
+				// Set the edges of the room to be walls, set value in map array to 1
 				mMapArray[(j + room.ry) * mMapW + i + room.rx] = 1;
+				// Four corners of the walls cannot generate new room
+				// So do not add them into mWalls
 				if ((i == 0 || i == room.rw - 1) && (j == 0 || j == room.rh - 1))
 					continue;
 				if (i + room.rx== 0 || j + room.ry  == 0 || i + room.rx == mMapH - 1 || j + room.ry == mMapW - 1)
 					continue;
 
+				// Add other walls that can generate new room to mWalls
 				mWalls.emplace_back(Wall(i + room.rx, j + room.ry));
 			}
 			else
+				// Area can walk through
 				mMapArray[(j + room.ry) * mMapW + i + room.rx] = 2;
 			
 		}
 	}
+	// Add this room to mRooms
 	mRooms.emplace_back(room);
 }
 
 
 void MapMaker::BuildConnectRoom(Room& room, Wall& wall)
+// Build a new room from this wall
 {
 	BuildRoom(room);
+	// Make the pass way the area can walk through
 	mMapArray[wall.gy * mMapW + wall.gx] = 2;
 	mMapArray[(wall.gy + mDir.gy) * mMapW + wall.gx + mDir.gx] = 2;
 }
 
 Wall MapMaker::ChooseWall()
+// Randomly choose a wall from current mWalls
 {
 	Random::Init();
 	int index = Random::GetIntRange(0, mWalls.size() - 1);
@@ -101,7 +126,9 @@ Wall MapMaker::ChooseWall()
 }
 
 Room MapMaker::CheckRoom(Wall& wall)
+// Try generating a random room from this wall
 {
+	// Generate a random size of the room
 	int roomW = Random::GetIntRange(4, mRoomMaxW);
 	int roomH = Random::GetIntRange(4, mRoomMaxH);
 	int wallX = wall.gx;
@@ -180,6 +207,7 @@ Room MapMaker::CheckRoom(Wall& wall)
 }
 
 bool MapMaker::CheckIntersect(Room& r)
+// Check if room r intersects with any of the rooms generated
 {
 	for (auto &r2 : mRooms)
 	{
@@ -190,7 +218,9 @@ bool MapMaker::CheckIntersect(Room& r)
 }
 
 bool MapMaker::RoomIntersect(Room& r1, Room& r2)
+// Check if room r1 intersects with room r2
 {
+	// Classic method to judge if two rectangles intersect
 	int maxminX = (r1.rx > r2.rx) ? r1.rx : r2.rx;
 	int maxminY = (r1.ry > r2.ry) ? r1.ry : r2.ry;
 	int minmaxX = (r1.rx + r1.rw < r2.rx + r2.rw) ? r1.rx + r1.rw : r2.rx + r2.rw;
@@ -199,6 +229,7 @@ bool MapMaker::RoomIntersect(Room& r1, Room& r2)
 }
 
 void MapMaker::RemoveWall(Wall& wall)
+// Remove the wall from mWalls
 {
 	auto iter = std::find(mWalls.begin(), mWalls.end(), wall);
 	if (iter != mWalls.end())
@@ -209,6 +240,7 @@ void MapMaker::RemoveWall(Wall& wall)
 }
 
 void MapMaker::PrintMap()
+// Output the map array and all the walls on the console window
 {
 	for (int i = 0; i < mMapH; i++)
 	{
@@ -250,6 +282,7 @@ Map::Map(int* array, int w, int h) :
 }
 
 Vector2 Map::GetRandomPos()
+// Get a random position from all of the rooms
 {
 	int index = Random::GetIntRange(0, mRooms.size() - 1);
 	Room room = mRooms[index];

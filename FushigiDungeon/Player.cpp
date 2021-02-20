@@ -8,15 +8,18 @@ Player::Player(Game *game):
 	GameObject(game)
 {
 	AnimeSprite* ps = new AnimeSprite(this, 100);
-	mc = new MoveComponent(this, true);
+	mc = new MoveComponent(this);
 	bc = new PlayerBattle(this);
 	ps->SetTexture(game->GetTexture("Player"));
 }
 
 void Player::ProcessInput(const Uint8* state)
+// Input from keyboard state
 {
+	// Player's will be freezed when the turn is not over
 	if (!mInputEnabled)
 		return;
+	// Set player's direction from input
 	if (state[SDL_SCANCODE_W] || state[SDL_SCANCODE_UP])
 	{
 		mc->SetDir(Vector2::NY);
@@ -37,7 +40,7 @@ void Player::ProcessInput(const Uint8* state)
 		mc->SetDir(Vector2::X);
 		bc->SetFacing(Vector2::X);
 	}
-
+	// Press shift to accelerate the moving speed
 	if (state[SDL_SCANCODE_LSHIFT] || state[SDL_SCANCODE_RSHIFT])
 	{
 		mc->SetSpeed(400);
@@ -49,17 +52,12 @@ void Player::ProcessInput(const Uint8* state)
 }
 
 void Player::InputKeyPressed(int key)
+// Input from keyboard pressed
 {
+	// Press space to attack
 	if (key == SDLK_SPACE && mInputEnabled)
 	{
 		bc->SetBattling();
 		mInputEnabled = false;
 	}
 }
-
-void Player::Update()
-{
-	//printf("%f,%f\n", GetPosition().x, GetPosition().y);
-	//printf("%d", mInputEnabled);
-}
-

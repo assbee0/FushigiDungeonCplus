@@ -21,6 +21,7 @@ class BattleComponent : public Component
 public:
 	BattleComponent(class GameObject* gameObject);
 	void Update() override;
+	// Receive damage and compute the real damage
 	virtual void BeAttacked(int damage);
 
 	bool IsDead();
@@ -30,7 +31,9 @@ public:
 	int GetExp() const { return mStatus.exp; }
 
 protected:
+	// Check if a target on current attack direction
 	virtual class BattleComponent* CheckTarget();
+	// Compute the attack damage
 	virtual void AttackTarget();
 	void AttackAnimation();
 	virtual void AttackOver();

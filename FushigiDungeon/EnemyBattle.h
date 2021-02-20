@@ -9,5 +9,6 @@ public:
 
 private:
 	void AttackOver() override;
+	// Return the target object, and decide the facing direction
 	class BattleComponent* CheckTarget() override;
 };

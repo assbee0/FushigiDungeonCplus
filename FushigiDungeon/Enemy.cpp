@@ -15,6 +15,7 @@ Enemy::Enemy(Game* game, int number):
 	GameObject(game),
 	mNumber(number)
 {
+	// The enemy status for each type is in the data
 	LoadData("Data/EnemyData.enmy", number);
 
 	AnimeSprite* es = new AnimeSprite(this, 99);
@@ -47,6 +48,7 @@ Enemy::~Enemy()
 }
 
 bool Enemy::LoadData(const std::string& fileName, int number)
+// Get enmey status from the file
 {
 	std::ifstream file(fileName);
 	if (!file.is_open())

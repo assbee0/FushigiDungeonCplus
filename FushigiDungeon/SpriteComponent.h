@@ -8,7 +8,9 @@ public:
 	SpriteComponent(class GameObject* gameObject, int drawOrder);
 	~SpriteComponent();
 
+	// Draw map according to the camera position
 	virtual void Draw(SDL_Renderer* renderer, class CameraLock* cam);
+	// Set the sprite to this component
 	virtual void SetTexture(SDL_Texture* texture);
 
 	int GetTexWidth() const { return mTexWidth; }

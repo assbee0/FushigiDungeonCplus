@@ -24,16 +24,21 @@ Dungeon::Dungeon(Game* game):
 
 void Dungeon::NewFloor()
 {
+	// Free last map
 	delete mMap->mapArray;
 	delete mMap;
+
+	// The map is getting bigger than last floor
 	mWidth = Mathf::Min(20 + mFloor * 2, 60);
 	mHeight = Mathf::Min(15 + mFloor * 2, 55);
+	// Make new map
 	GetComponent<MapMaker>()->SetParameters(mWidth, mHeight, 10, 10);
 	mMap = GetComponent<MapMaker>()->BuildMap();
 	GetComponent<MapComponent>()->SetMap(mMap);
 	mFloor++;
 	printf("Floor %d\n", mFloor);
 	
+	// Change bgm or set game clear for some specific floors
 	switch (mFloor)
 	{
 	case 6:

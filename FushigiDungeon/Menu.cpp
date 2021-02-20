@@ -5,18 +5,23 @@
 Menu::Menu(Game* game):
 	UIScreen(game)
 {
+	// Run into GPaused to process UI input
 	mGame->SetGameState(Game::GameState::GPaused);
 	Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
 	
+	// Set background
 	SDL_Renderer* renderer = game->GetRenderer();
 	mTexBackground = game->GetTexture("MenuBack");
 	mBackPos = Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT / 2);
+	// Set main text
 	mTextCenter = false;
 	mTextPos = Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT / 4);
 	SetText("Menu", Vector3(0.286f, 0.141f, 0.055f), 24, renderer);
 
+	// Set buttons
 	mButtonOff = game->GetTexture("ButtonOff");
 	mButtonOn = game->GetTexture("ButtonOn");
+	// Three buttons are placed in vertical
 	Button* b1 = new Button(this);
 	b1->SetPosition(Vector2(WINDOWS_WIDTH / 2, 180));
 	b1->SetText("Resume", Vector3(0.898f, 0.835f, 0.737f), 18, renderer);
@@ -39,17 +44,22 @@ Menu::~Menu()
 }
 
 void Menu::InputKeyPressed(int key)
+// Input from keyboard pressed
 {
 	UIScreen::InputKeyPressed(key);
 
 	switch (key)
 	{
 	case SDLK_ESCAPE:
+		// Press esc to close the menu
 		Mix_PlayChannel(-1, mGame->GetSound("Cancel"), 0);
 		Close();
 		break;
+
 	case SDLK_DOWN:
 	case SDLK_s:
+		// Select three vertical buttons
+		// The first selected button is top button
 		if (mCurButton == nullptr)
 		{
 			ResetButtonState();

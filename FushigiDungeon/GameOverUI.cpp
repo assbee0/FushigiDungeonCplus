@@ -7,6 +7,7 @@ GameOverUI::GameOverUI(Game* game, int level, int floor) :
 	UIScreen(game),
 	mFloorText(nullptr)
 {
+	// Run into GPaused to process UI input
 	game->SetGameState(Game::GameState::GPaused);
 
 	SDL_Renderer* renderer = game->GetRenderer();
@@ -17,6 +18,7 @@ GameOverUI::GameOverUI(Game* game, int level, int floor) :
 	mTextPos = Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT * 9 / 20);
 	SetText("Result", Vector3(0.286f, 0.141f, 0.055f), 28, renderer);
 
+	// Sub text, including floor and level information
 	std::stringstream ss1, ss2;
 	ss1 << "Floor: " << floor;
 	ss2 << "Level: " << level;
@@ -25,6 +27,7 @@ GameOverUI::GameOverUI(Game* game, int level, int floor) :
 	mButtonOff = game->GetTexture("ButtonOff");
 	mButtonOn = game->GetTexture("ButtonOn");
 
+	// Two buttons are placed in horizontal on the bottom of the screen
 	Button* b1 = new Button(this);
 	b1->SetPosition(Vector2(WINDOWS_WIDTH / 3, 420));
 	b1->SetText("Restart", Vector3(0.898f, 0.835f, 0.737f), 18, renderer);
@@ -38,6 +41,7 @@ GameOverUI::GameOverUI(Game* game, int level, int floor) :
 
 GameOverUI::~GameOverUI()
 {
+	// Free two sub text textures
 	if (mFloorText)
 	{
 		SDL_DestroyTexture(mFloorText);
@@ -49,6 +53,7 @@ GameOverUI::~GameOverUI()
 }
 
 void GameOverUI::InputKeyPressed(int key)
+// Input from keyboard pressed
 {
 	UIScreen::InputKeyPressed(key);
 
@@ -58,6 +63,8 @@ void GameOverUI::InputKeyPressed(int key)
 	case SDLK_a:
 	case SDLK_RIGHT:
 	case SDLK_d:
+		// Select two horizontal buttons
+		// The first selected button is left button
 		if (mCurButton == nullptr)
 		{
 			ResetButtonState();
@@ -83,13 +90,17 @@ void GameOverUI::InputKeyPressed(int key)
 }
 
 void GameOverUI::Draw(SDL_Renderer* renderer)
+// GameOverUI has sub texts, so override
 {
+	// Draw background, main text, and buttons
 	UIScreen::Draw(renderer);
+	// Draw sub text 1
 	if (mFloorText)
 	{
 		SDL_Rect dstRect = TextureRect(mFloorText, Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT * 11 / 20));
 		SDL_RenderCopy(renderer, mFloorText, nullptr, &dstRect);
 	}
+	// Draw sub text 2
 	if (mLevelText)
 	{
 		SDL_Rect dstRect = TextureRect(mLevelText, Vector2(WINDOWS_WIDTH / 2, WINDOWS_HEIGHT * 13 / 20));
@@ -98,7 +109,9 @@ void GameOverUI::Draw(SDL_Renderer* renderer)
 }
 
 void GameOverUI::SetSubText(const std::string& text1, const std::string& text2, const Vector3& color, int size, SDL_Renderer* renderer)
+// Set two sub texts
 {
+	// Set floor text
 	if (mFloorText)
 	{
 		SDL_DestroyTexture(mFloorText);
@@ -110,7 +123,7 @@ void GameOverUI::SetSubText(const std::string& text1, const std::string& text2, 
 		mFloorText = SDL_CreateTextureFromSurface(renderer, surf);
 		SDL_FreeSurface(surf);
 	}
-
+	// Set level text
 	if (mLevelText)
 	{
 		SDL_DestroyTexture(mLevelText);
@@ -136,7 +149,7 @@ std::function<void()> GameOverUI::RestartOnClick()
 {
 	return [this]()
 	{
-		Mix_PlayChannel(-1, mGame->GetSound("Menu"), 0);
+		// Do not play sound because this object will be free by Restart()
 		mGame->Restart();
 	};
 }

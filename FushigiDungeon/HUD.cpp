@@ -20,6 +20,7 @@ HUD::HUD(Game* game) :
 }
 
 void HUD::UpdateValues()
+// Update the HUD text
 {
 	std::stringstream ss;
 	ss << "Floor: " << std::setw(3) << std::setfill('0') << mFloor << "     ";
@@ -34,6 +35,7 @@ void HUD::UpdateValues()
 }
 
 void HUD::SetStatus(int l, int c, int m, int a, int d, int e)
+// Should be called when any of the values are changed to update the status
 {
 	mLevel = l;
 	mCurHp = c;

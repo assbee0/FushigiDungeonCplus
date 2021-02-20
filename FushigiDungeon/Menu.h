@@ -7,6 +7,7 @@ public:
 	Menu(class Game* game);
 	~Menu();
 
+	// Input from keyboard pressed
 	void InputKeyPressed(int key) override;
 
 private:

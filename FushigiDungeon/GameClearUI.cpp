@@ -4,6 +4,7 @@
 GameClearUI::GameClearUI(Game* game):
 	UIScreen(game)
 {
+	// Run into GPaused to process UI input
 	game->SetGameState(Game::GameState::GPaused);
 
 	SDL_Renderer* renderer = game->GetRenderer();
@@ -13,6 +14,7 @@ GameClearUI::GameClearUI(Game* game):
 	mButtonOff = game->GetTexture("ButtonOff");
 	mButtonOn = game->GetTexture("ButtonOn");
 
+	// Two buttons are placed in horizontal on the bottom of the screen
 	Button* b1 = new Button(this);
 	b1->SetPosition(Vector2(WINDOWS_WIDTH / 3, 420));
 	b1->SetText("Restart", Vector3(0.898f, 0.835f, 0.737f), 18, renderer);
@@ -25,6 +27,7 @@ GameClearUI::GameClearUI(Game* game):
 }
 
 void GameClearUI::InputKeyPressed(int key)
+// Input from keyboard pressed
 {
 	UIScreen::InputKeyPressed(key);
 	switch (key)
@@ -33,6 +36,8 @@ void GameClearUI::InputKeyPressed(int key)
 	case SDLK_a:
 	case SDLK_RIGHT:
 	case SDLK_d:
+		// Select two horizontal buttons
+		// The first selected button is left button
 		if (mCurButton == nullptr)
 		{
 			ResetButtonState();
@@ -69,6 +74,7 @@ std::function<void()> GameClearUI::RestartOnClick()
 {
 	return [this]()
 	{
+		// Do not play sound because this object will be free by Restart()
 		mGame->Restart();
 	};
 }
